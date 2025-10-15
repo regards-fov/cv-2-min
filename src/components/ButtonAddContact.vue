@@ -5,8 +5,6 @@ import { computed } from 'vue'
 const props = defineProps({
     storedData: { type: Array, required: true },
     defaultData: { type: Object, required: false },
-    pathPrefix: { type: String, required: true },
-    defaultValue: { type: String, default: "Nouvelle entrée" },
 });
 
 const emit = defineEmits(["add-contact"]);
@@ -38,15 +36,15 @@ function getUpcomingValue() {
 
     return {
         key: 'extraInfo',
-        value: props.defaultValue,
+        value: "LinkedIn, site perso, Twitter/X...",
     };
 }
 
 function handleAdd() {
-    const path = `${props.pathPrefix}.${getUpcomingValue().key}`;
+    const key = getUpcomingValue().key;
     const value = getUpcomingValue().value
 
-    emit("add-contact", path, value, 'add');
+    emit("add-contact", key, value);
 }
 
 </script>

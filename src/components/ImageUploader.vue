@@ -1,42 +1,25 @@
 <script setup>
 
-const props = defineProps({
-    path: String,
-    imageBorderRadius: { type: Number, default: 2 },
-})
+const path = defineModel('path', { type: String })
+const imageBorderRadius = defineModel('imageBorderRadius', { type: Number, default: 2 })
 
-const isDisabled = () => props.path === "https://placehold.co/300x300?text=Photo"
-
-const emit = defineEmits(['update:path', 'update:imageBorderRadius'])
+const isDisabled = () => path.value === "https://placehold.co/300x300?text=Photo"
 
 const uploadPicture = (e) => {
-    console.log('test');
     const file = e.target.files.item(0)
+    if (!file || !file.type.match('image.*')) return
 
-    if (!file) { return false }
-    if (!file.type.match('image.*')) { return false }
-
-    const fileReader = new FileReader()
-
-    fileReader.onload = (event) => {
-        emit('update:path', event.target.result)
+    const reader = new FileReader()
+    reader.onload = (event) => {
+        path.value = event.target.result
         e.target.value = ''
-
-    };
-    fileReader.onerror = (error) => {
-        console.error('Erreur FileReader:', error)
-    };
-    fileReader.readAsDataURL(file);
-}
-
-const updateRadius = (value) => {
-    emit('update:imageBorderRadius', Number(value))
+    }
+    reader.readAsDataURL(file)
 }
 
 </script>
 <template>
     <div class="picture_container">
-
         <div class="image-wrapper">
             <img
                 :src="path"
@@ -46,7 +29,6 @@ const updateRadius = (value) => {
             />
 
             <div class="btns_container">
-
                 <label
                     for="user-picture"
                     class="image-btn custom-file-upload green"
@@ -55,30 +37,28 @@ const updateRadius = (value) => {
                         id="user-picture"
                         type="file"
                         accept="image/*"
-                        value=""
                         @change="uploadPicture"
                     >
                     {{ isDisabled() ? '+' : '↻' }}
                 </label>
+
                 <div
                     id="red"
                     class="image-btn red"
                     :class="{ disabled: isDisabled() }"
-                    @click="!isDisabled() && emit('update:path', 'https://placehold.co/300x300?text=Photo')"
+                    @click="!isDisabled() && (path = 'https://placehold.co/300x300?text=Photo')"
                 >−</div>
             </div>
+
             <input
                 class="radiusAdjuster"
                 type="range"
-                :value="imageBorderRadius"
-                @change="updateRadius($event.target.value)"
+                v-model.number="imageBorderRadius"
                 min="2"
                 max="50"
                 v-show="!isDisabled()"
             />
         </div>
-
-
     </div>
 </template>
 

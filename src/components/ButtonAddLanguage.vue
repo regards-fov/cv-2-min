@@ -3,7 +3,7 @@
 const emit = defineEmits(["add-language"]);
 
 const handleAddLanguage = () => {
-    emit('add-language', 'add');
+    emit('add');
 };
 
 </script>

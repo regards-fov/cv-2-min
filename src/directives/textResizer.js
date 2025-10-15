@@ -1,64 +1,93 @@
 export default {
     mounted(el, binding) {
         const options = {
-            minFontSize: binding.value.minFontSize,
-            default: binding.value.default,
             id: binding.value.id,
-            maxHeight: '',
-            active: binding.value,
+            minFontSize: binding.value.minFontSize || 8,
+            default: binding.value.default || 22,
+            maxHeight: binding.value.maxHeight || null,
         }
 
+        const target = document.getElementById(options.id)
+        const input = document.getElementById(options.id + '-input')
+        if (!target || !input) return
 
         const resize = () => {
-            const target = document.getElementById(options.id)
-            if (!target) return
+            const parent = target.parentElement || input.parentElement
+            if (!parent) return
 
-            target.style.fontSize = options.default + 'pt'
+            const parentWidth = parent.clientWidth - 10
+            const textValue = input.value || target.textContent || input.placeholder || ''
 
-            //-10px pour prendre en compte le padding 
-            const parentWidth = target.parentElement.clientWidth - 10
-            const textWidth = target.scrollWidth
-            const textHeight = target.offsetHeight
+            // Copie TOUS les styles de l'input
+            const computedStyle = window.getComputedStyle(input)
+            const span = document.createElement('span')
+            span.style.cssText = `
+                position: absolute;
+                visibility: hidden;
+                white-space: nowrap;
+                font-size: ${options.default}pt;
+                font-family: ${computedStyle.fontFamily};
+                font-weight: ${computedStyle.fontWeight};
+                letter-spacing: ${computedStyle.letterSpacing};
+                padding: ${computedStyle.padding};
+            `
+            span.textContent = textValue
+            document.body.appendChild(span)
+
+            const textWidth = span.offsetWidth
+            document.body.removeChild(span)
 
             let fontSize = options.default
 
             if (textWidth > parentWidth) {
-                const ratio = parentWidth / textWidth
-                fontSize = Math.floor(options.default * ratio)
+                // On ajoute 5% de marge pour compenser les imprécisions de rendu
+                const adjustedRatio = (parentWidth * 0.95) / textWidth
+                fontSize = Math.max(
+                    options.minFontSize,
+                    Math.floor(options.default * adjustedRatio)
+                )
             }
 
-            if (options.maxHeight && textHeight > options.maxHeight) {
-                const heightRatio = options.maxHeight / textHeight
-                const heightFontSize = Math.floor(options.default * heightRatio)
-
-                fontSize = Math.min(fontSize, heightFontSize)
-            }
-
-            if (fontSize < options.minFontSize) fontSize = options.minFontSize
-
+            // Application de la taille
+            input.style.fontSize = fontSize + 'pt'
             target.style.fontSize = fontSize + 'pt'
         }
+
+        // Mise à jour quand on tape dans l'input
+        input.addEventListener('input', resize)
+        input.addEventListener('focus', resize)
+        input.addEventListener('blur', () => {
+            resize()
+            // Applique aussi au target pour l'affichage
+            setTimeout(() => {
+                target.style.fontSize = input.style.fontSize
+            }, 0)
+        })
+
+        // Réajustement si le conteneur change
+        const observer = new ResizeObserver(resize)
+        if (target.parentElement) observer.observe(target.parentElement)
+        if (input.parentElement && input.parentElement !== target.parentElement) {
+            observer.observe(input.parentElement)
+        }
+
+        el._resizeObserver = observer
         el._resizeHandler = resize
 
-        const target = options.id ? document.getElementById(options.id) : el
-
-        if (target?.parentElement) {
-            const observer = new ResizeObserver(() => {
-                resize()
-            })
-            observer.observe(target.parentElement)
-            el._resizeObserver = observer
-        }
-
-        el.addEventListener('blur', resize)
-        el.addEventListener('input', resize)
+        // Premier calcul après rendu
+        requestAnimationFrame(resize)
     },
+
     unmounted(el) {
         if (el._resizeHandler) {
-            el.removeEventListener('blur', el._resizeHandler)
-            el.removeEventListener('input', el._resizeHandler)
-            delete el._resizeHandler
+            const options = el._bindingValue || {}
+            const input = document.getElementById(options.id + '-input')
+            if (input) {
+                input.removeEventListener('input', el._resizeHandler)
+                input.removeEventListener('blur', el._resizeHandler)
+                input.removeEventListener('focus', el._resizeHandler)
+            }
         }
-
-    }
+        if (el._resizeObserver) el._resizeObserver.disconnect()
+    },
 }
