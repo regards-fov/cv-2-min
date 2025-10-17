@@ -7,7 +7,7 @@ const props = defineProps({
     defaultData: { type: Object, required: false },
 });
 
-const emit = defineEmits(["add-contact"]);
+const emit = defineEmits(["addContact"]);
 
 const requiredFields = computed(() => {
     if (!props.defaultData) return [];
@@ -44,7 +44,7 @@ function handleAdd() {
     const key = getUpcomingValue().key;
     const value = getUpcomingValue().value
 
-    emit("add-contact", key, value);
+    emit("addContact", key, value);
 }
 
 </script>

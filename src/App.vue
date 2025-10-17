@@ -1,8 +1,10 @@
 <script setup>
-import MainSection from "./components/MainSection.vue";
-import Sidebar from "./components/SideBar.vue";
+import MainSection from "./components/layout/MainSection.vue";
+import Sidebar from "./components/layout/SideBar.vue";
 import { useLocalStorage } from "./composables/useLocalStorage";
 import defaultCvData from "./resources/defaultCvData.json";
+import { provide } from 'vue'
+
 
 const dlJSON = () => {
   const jsonLocalStorage = localStorage.getItem("cvData")
@@ -21,6 +23,9 @@ const { value: data, clear: clearCvData } = useLocalStorage(
   "cvData",
   defaultCvData
 );
+
+provide('cvData', data)
+provide('defaultCvData', defaultCvData)
 
 </script>
 
@@ -47,6 +52,12 @@ const { value: data, clear: clearCvData } = useLocalStorage(
 </template>
 
 <style scoped>
+.sidebar,
+.main {
+  min-width: 0;
+  min-height: 0;
+}
+
 #container {
   background-color: whitesmoke;
   display: grid;
@@ -60,6 +71,7 @@ const { value: data, clear: clearCvData } = useLocalStorage(
 
 :deep(textarea) {
   all: unset;
+  display: block;
   width: 100%;
   height: auto;
   overflow: hidden;

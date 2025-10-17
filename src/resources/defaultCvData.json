@@ -58,35 +58,32 @@
         ],
         "hobbies": "Musique, arts graphiques, sports de glisse, sports de combat,mécanique, travail manuel",
         "resume": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Veniam, aliquid quod! Harum, dolorum assumenda. Iusto ullam deserunt officia enim in voluptatibus impedit voluptates aliquid debitis architecto, delectus excepturi eaque necessitatibus.",
-        "professionalXp": {
-            "title": "Expériences professionelles",
-            "jobs": [
-                {
-                    "job": "Eleveur de hérissons",
-                    "period": "2022-2024",
-                    "months": "",
-                    "description": "Durant cette période j'ai élevé beaucoup de petits hérissons et je les ai soignés et puis aussi bla bla bla bla bla bla bla bla"
-                },
-                {
-                    "job": "Eleveur de bestioles",
-                    "period": "2020",
-                    "months": "6",
-                    "description": "Durant cette période j'ai élevé beaucoup de petites bestioles et je les ai soignées et puis aussi bla bla bla bla bla bla bla bla"
-                },
-                {
-                    "job": "Eleveur de hérissons",
-                    "period": "2018-2019",
-                    "months": "",
-                    "description": "Durant cette période j'ai élevé beaucoup de petits blablas !"
-                },
-                {
-                    "job": "Eleveur de bestioles",
-                    "period": "2017",
-                    "months": "2",
-                    "description": "Durant cette période bla bla bla bla bla bla bla bla"
-                }
-            ]
-        },
+        "professionalXp": [
+            {
+                "job": "Eleveur de hérissons",
+                "period": "2022-2024",
+                "months": "",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+            },
+            {
+                "job": "Eleveur de bestioles",
+                "period": "2020",
+                "months": "6",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum "
+            },
+            {
+                "job": "Eleveur de hérissons",
+                "period": "2018-2019",
+                "months": "",
+                "description": "Durant cette période j'ai élevé beaucoup de petits blablas !"
+            },
+            {
+                "job": "Eleveur de bestioles",
+                "period": "2017",
+                "months": "2",
+                "description": "Durant cette période bla bla bla bla bla bla bla bla"
+            }
+        ],
         "extraXp": [
             {
                 "job": "Eleveur de hérissons",

@@ -1,9 +1,9 @@
 <script setup>
 
-const emit = defineEmits(["add-language"]);
+const emit = defineEmits(["addLanguage"]);
 
 const handleAddLanguage = () => {
-    emit('add');
+    emit('addLanguage');
 };
 
 </script>
