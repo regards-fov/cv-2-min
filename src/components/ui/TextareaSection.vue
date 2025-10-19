@@ -14,21 +14,18 @@ const props = defineProps({
 })
 
 const label = ref(props.name)
-console.log(label.value);
 const ta = useTemplateRef(`ta-${label.value}`)
 const textareaId = computed(() => `ta-${label.value}`)
 
 onMounted(async () => {
     await nextTick()
     requestAnimationFrame(() => {
-        console.log('lol');
         if (!ta.value) return
         ta.value.style.height = 'auto'
         ta.value.style.height = ta.value.scrollHeight + 'px'
     })
 
     ta.value?.addEventListener('input', () => {
-        console.log('lolol');
         ta.value.style.height = 'auto'
         ta.value.style.height = ta.value.scrollHeight + 'px'
     })
@@ -53,7 +50,6 @@ onMounted(async () => {
     display: flex;
     flex: auto;
     width: 100%;
-    box-sizing: border-box !important;
-    padding: 2px;
+    box-sizing: border-box;
 }
 </style>

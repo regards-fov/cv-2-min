@@ -55,23 +55,21 @@ const removeItem = (index) => {
                 :key="language.key"
             >
                 <label>
-                    <p>
-                        <select
-                            name="language-name"
-                            :id="`language-select-${index}`"
-                            class="language-select"
-                            v-model="cvData.cv.spokenLanguages[index].value"
+                    <select
+                        name="language-name"
+                        :id="`language-select-${index}`"
+                        class="language-select"
+                        v-model="cvData.cv.spokenLanguages[index].value"
+                    >
+                        <option value="">--</option>
+                        <option
+                            v-for="item in languageList"
+                            :key="item.code"
+                            :value="item.name"
                         >
-                            <option value="">--</option>
-                            <option
-                                v-for="item in languageList"
-                                :key="item.code"
-                                :value="item.name"
-                            >
-                                {{ item.name }}
-                            </option>
-                        </select>
-                    </p>
+                            {{ item.name }}
+                        </option>
+                    </select>
                 </label>
 
                 <label :for="`level-select-${index}`"></label>
@@ -103,6 +101,10 @@ const removeItem = (index) => {
 .languages {
     display: flex;
     flex-direction: column;
+
+    label {
+        flex: 1 1 auto;
+    }
 }
 
 ul li {

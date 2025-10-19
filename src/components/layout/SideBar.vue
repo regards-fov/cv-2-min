@@ -67,14 +67,10 @@ const handleSidebarResize = (event) => {
         <div class="sidebar-label">
           CENTRES D'INTÉRÊT
         </div>
-        <ul class="list">
-          <li>
-            <TextareaSection
-              v-model="$cv.hobbies"
-              name="hobbies"
-            />
-          </li>
-        </ul>
+        <TextareaSection
+          v-model="$cv.hobbies"
+          name="hobbies"
+        />
       </div>
 
 
@@ -123,12 +119,29 @@ const handleSidebarResize = (event) => {
 
 .contact,
 .skills,
-.hobbies,
 .languages {
   border-radius: 6px;
   padding: 15px 15px 4px 15px;
 }
 
+.hobbies {
+  padding: 15px 13px;
+
+  .sidebar-label {
+    padding: 2px;
+  }
+
+  .textarea-section {
+    padding: 2px;
+
+    &:hover {
+      border-radius: 6px;
+      background-color: rgb(236, 236, 236);
+      color: #8a8a8a;
+      box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+    }
+  }
+}
 
 :deep(ul) {
   padding: 0;
@@ -142,7 +155,6 @@ const handleSidebarResize = (event) => {
   display: flex;
   flex-direction: column;
   gap: 0px;
-
   margin: 4px 0 -8px 0px;
 
   li {
@@ -150,7 +162,7 @@ const handleSidebarResize = (event) => {
     flex-wrap: wrap;
     list-style: none;
     position: relative;
-    padding: 2px 0 2px 4px;
+    padding-left: 2px;
     margin: 2px 0;
 
     &:hover {

@@ -1,18 +1,12 @@
 <script setup>
 
 import { ref, watch, computed, nextTick } from "vue"
-import vResizer from '../../directives/textResizer'
 import vFocus from '../../directives/inputFocus'
+import vAutoResize from '../../directives/autoResize'
 
 const props = defineProps({
     label: String,
-    defaultFontSize: Number,
-    mustFocus: Boolean,
-    allowResizing: {
-        type: Object, default: () => ({
-            enabled: false
-        })
-    }
+    mustFocus: Boolean
 })
 
 const modelValue = defineModel({ type: String })
@@ -24,17 +18,9 @@ const textColor = computed(() =>
     modelValue.value === '' ? '#e2e2e2' : 'inherit'
 )
 
-const resizerConfig = computed(() => {
-    if (!props.allowResizing.enabled) return false
-    return {
-        minFontSize: props.allowResizing.minFontSize,
-        default: props.defaultFontSize,
-        id: props.label
-    }
-})
-
-watch(() => props.mustFocus, (newVal) => {
-    if (newVal) {
+watch(() => props.mustFocus, (newVal, oldVal) => {
+    console.log(newVal, oldVal);
+    if (newVal & newVal !== oldVal) {
         editing.value = true
         nextTick(() => {
             inputRef.value?.focus()
@@ -55,6 +41,7 @@ const handleBlur = () => {
 </script>
 <template>
     <div
+        class="extra-padding"
         :id="label"
         v-show="!editing"
         @click="editing = true"
@@ -66,101 +53,100 @@ const handleBlur = () => {
         {{ modelValue || label }}
     </div>
     <input
+        class="extra-padding"
         ref="inputRef"
         :id="label + '-input'"
         :class="label + '-input restyle-input'"
         v-show="editing"
         v-focus="editing"
+        v-auto-resize
         @blur="handleBlur"
         @keydown="handleKeydown"
-        :placeholder="modelValue"
-        :style="{ fontSize: props.defaultFontSize + 'pt' }"
-        v-resizer="resizerConfig"
+        :placeholder="label"
         v-model="modelValue"
     />
 </template>
 
 <style scoped lang="scss">
-.name-container {
-    container-type: inline-size;
-}
-
-.personal>div {
-    margin: 0 0 6px 0;
-}
-
-.username {
-    font-size: 24pt;
-}
-
-.username,
-.username-input {
-    font-weight: bold;
-}
-
-.username,
-.lookup-job {
-    flex-shrink: 1;
-}
-
-.lookup-job,
-.lookup-job-input {
-    font-size: x-large;
-}
-
-.job-date {
-    font-weight: 500;
-}
-
-.job-label,
-.job-date {
-    display: flex;
-    margin: 0;
-}
-
-.job-label,
-.xtra-job-label {
-    font-weight: bold;
-}
-
-.job-date-input,
-.job-label-input {
-
-    width: 39%;
-    box-sizing: border-box;
-}
-
-.extra-date {
-    align-self: flex-end;
-    font-size: smaller;
-    font-style: italic;
-}
-
-.extraInfo1,
-.extraInfo2 {
-    color: azure;
-}
-
 .restyle-input {
     display: block;
     box-sizing: border-box;
-    height: auto;
     background: transparent;
     border: none;
     padding: 0;
     margin: 0;
+    font-size: inherit;
     font-family: inherit;
     color: inherit;
     line-height: normal;
     text-align: inherit;
     appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
     outline: none;
-
 }
 
-.restyle-input:focus {
-    outline: none;
+.username,
+.username-input,
+.job-label,
+.job-label-input,
+.xtra-job-label,
+.xtra-job-label-input {
+    font-weight: bold;
+}
+
+.job-date,
+.job-date-input {
+    font-weight: 500;
+}
+
+.job-extra-info {
+    display: flex;
+    justify-content: flex-start;
+    align-self: flex-end;
+    font-style: italic;
+    flex-basis: 100%;
+    font-size: 10pt;
+    margin-top: -2px;
+}
+
+.job-extra-info-input {
+    display: flex;
+    justify-content: flex-start;
+    gap: 4px;
+    align-self: flex-end;
+    font-style: italic;
+    flex-basis: 100%;
+    padding: 2px;
+    font-size: 10pt;
+}
+
+.job-label {
+    flex: 1;
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+    margin-left: 13px;
+}
+
+.job-date:hover,
+.job-label:hover,
+.job-extra-info:hover {
+    border-radius: 5px;
+    background-color: #ececec;
+    color: #8a8a8a;
+    box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+}
+
+.job-label-input {
+    height: 100%;
+    margin-left: 13px;
+}
+
+.extra-padding {
+    padding: 2px;
+}
+
+.ta-job-desc {
+    padding: 2px;
 }
 </style>

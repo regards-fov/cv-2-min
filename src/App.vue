@@ -1,16 +1,14 @@
 <script setup>
+import { provide } from 'vue'
 import MainSection from "./components/layout/MainSection.vue";
 import Sidebar from "./components/layout/SideBar.vue";
 import { useLocalStorage } from "./composables/useLocalStorage";
 import defaultCvData from "./resources/defaultCvData.json";
-import { provide } from 'vue'
-
 
 const dlJSON = () => {
   const jsonLocalStorage = localStorage.getItem("cvData")
   const blob = new Blob([jsonLocalStorage], { type: 'text/plain' })
   const url = URL.createObjectURL(blob)
-
   const a = document.createElement('a')
   a.href = url
   a.download = 'cvData.json'
@@ -49,6 +47,7 @@ provide('defaultCvData', defaultCvData)
     />
 
   </div>
+
 </template>
 
 <style scoped>
@@ -81,9 +80,9 @@ provide('defaultCvData', defaultCvData)
   border-radius: 4px;
   scrollbar-width: none;
   font-size: 11pt;
+  padding: 2px;
 
-  &:focus {
-    outline: none;
+  &:focus-within {
     box-shadow: 0 0 0 2px Highlight;
     border-radius: 5px;
   }

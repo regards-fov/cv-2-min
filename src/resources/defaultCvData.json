@@ -61,26 +61,26 @@
         "professionalXp": [
             {
                 "job": "Eleveur de hérissons",
-                "period": "2022-2024",
-                "months": "",
+                "period": "2022 - 2024",
+                "extraInfo": "extra info here",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
             },
             {
                 "job": "Eleveur de bestioles",
-                "period": "2020",
-                "months": "6",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum "
+                "period": "2019 - 2020",
+                "extraInfo": "",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscelit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore"
             },
             {
                 "job": "Eleveur de hérissons",
-                "period": "2018-2019",
-                "months": "",
+                "period": "2018",
+                "extraInfo": "stage de 6 mois",
                 "description": "Durant cette période j'ai élevé beaucoup de petits blablas !"
             },
             {
                 "job": "Eleveur de bestioles",
-                "period": "2017",
-                "months": "2",
+                "period": "2016 - 2017",
+                "extraInfo": "",
                 "description": "Durant cette période bla bla bla bla bla bla bla bla"
             }
         ],

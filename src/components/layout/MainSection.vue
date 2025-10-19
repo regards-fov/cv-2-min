@@ -76,6 +76,10 @@ const $cv = computed(() => props.cvData.cv);
     margin-bottom: 14px;
 }
 
+:deep(#ta-resume) {
+    font-size: 13pt;
+}
+
 .main-label {
     display: inline-flex;
     padding-right: 11px;
@@ -84,11 +88,11 @@ const $cv = computed(() => props.cvData.cv);
 }
 
 .job-list {
-    padding-left: 20px;
+    padding-left: 0;
     margin: 6px auto;
 }
 
 .jobs {
-    padding: 10px;
+    padding: 6px;
 }
 </style>

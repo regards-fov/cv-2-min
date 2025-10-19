@@ -3,22 +3,22 @@ export default {
         const options = {
             id: binding.value.id,
             minFontSize: binding.value.minFontSize || 8,
-            default: binding.value.default || 22,
-            maxHeight: binding.value.maxHeight || null,
+            default: binding.value.default || 22
         }
 
         const target = document.getElementById(options.id)
         const input = document.getElementById(options.id + '-input')
+
         if (!target || !input) return
 
         const resize = () => {
-            const parent = target.parentElement || input.parentElement
+            const parent = document.getElementById("personal-info")
             if (!parent) return
 
-            const parentWidth = parent.clientWidth - 10
+            const parentWidth = parent.clientWidth
             const textValue = input.value || target.textContent || input.placeholder || ''
 
-            // Copie TOUS les styles de l'input
+            //Copie des styles de l'input pour récupérer la taille réelle
             const computedStyle = window.getComputedStyle(input)
             const span = document.createElement('span')
             span.style.cssText = `
@@ -40,7 +40,7 @@ export default {
             let fontSize = options.default
 
             if (textWidth > parentWidth) {
-                // On ajoute 5% de marge pour compenser les imprécisions de rendu
+                // 5% de marge pour compenser les imprécisions de rendu
                 const adjustedRatio = (parentWidth * 0.95) / textWidth
                 fontSize = Math.max(
                     options.minFontSize,
@@ -48,23 +48,20 @@ export default {
                 )
             }
 
-            // Application de la taille
             input.style.fontSize = fontSize + 'pt'
             target.style.fontSize = fontSize + 'pt'
         }
 
-        // Mise à jour quand on tape dans l'input
         input.addEventListener('input', resize)
         input.addEventListener('focus', resize)
         input.addEventListener('blur', () => {
             resize()
-            // Applique aussi au target pour l'affichage
             setTimeout(() => {
                 target.style.fontSize = input.style.fontSize
             }, 0)
         })
 
-        // Réajustement si le conteneur change
+        // On observe les changements en temps réel
         const observer = new ResizeObserver(resize)
         if (target.parentElement) observer.observe(target.parentElement)
         if (input.parentElement && input.parentElement !== target.parentElement) {
@@ -74,7 +71,6 @@ export default {
         el._resizeObserver = observer
         el._resizeHandler = resize
 
-        // Premier calcul après rendu
         requestAnimationFrame(resize)
     },
 
