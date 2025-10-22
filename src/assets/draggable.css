@@ -1,0 +1,124 @@
+/* draggable.css */
+
+/* Élément en cours de drag */
+.dragging {
+    opacity: 0.4 !important;
+    transform: scale(0.98);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Placeholder à l'emplacement d'origine (FIXE) */
+.drag-placeholder {
+    border: 3px dashed #3b82f6 !important;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(99, 102, 241, 0.08) 100%) !important;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), inset 0 0 20px rgba(59, 130, 246, 0.1);
+    animation: placeholderPulse 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.drag-placeholder::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 3px dashed #3b82f6;
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: rotate 3s linear infinite;
+}
+
+.drag-placeholder::after {
+    content: "⇅";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #3b82f6;
+    font-size: 24px;
+    font-weight: bold;
+    opacity: 0.7;
+    animation: bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes placeholderPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), inset 0 0 20px rgba(59, 130, 246, 0.1);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.25), inset 0 0 30px rgba(59, 130, 246, 0.15);
+    }
+}
+
+@keyframes rotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+    50% { transform: translate(-50%, -50%) translateY(-5px); }
+}
+
+/* Indicateurs de position d'insertion (lignes animées) */
+.drop-indicator-top {
+    position: relative;
+}
+
+.drop-indicator-top::before {
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #10b981, #3b82f6);
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    animation: pulse 1s ease-in-out infinite;
+    z-index: 1000;
+}
+
+.drop-indicator-bottom {
+    position: relative;
+}
+
+.drop-indicator-bottom::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #10b981, #3b82f6);
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    animation: pulse 1s ease-in-out infinite;
+    z-index: 1000;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scaleY(1.2);
+    }
+}
+
+/* Légère surbrillance au hover */
+.drag-hover-zone {
+    background: rgba(16, 185, 129, 0.05) !important;
+    transition: background 0.15s ease;
+}
+
+/* Animation de transition */
+[draggable="true"] {
+    transition: transform 0.2s ease;
+}

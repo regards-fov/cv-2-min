@@ -1,0 +1,106 @@
+{
+    "cv": {
+        "personal": [
+            {
+                "key": "username",
+                "value": "Clara Dupont",
+                "required": true
+            },
+            {
+                "key": "job",
+                "value": "Chargée de marketing digital",
+                "required": true
+            },
+            {
+                "key": "age",
+                "value": 27,
+                "required": false
+            }
+        ],
+        "picture": {
+            "path": "https://placehold.co/300x300?text=Clara+Dupont",
+            "imageBorderRadius": 2
+        },
+        "contact": [
+            {
+                "key": "email",
+                "value": "clara.dupont@gmail.com",
+                "required": true
+            },
+            {
+                "key": "address",
+                "value": "12 Rue des Lilas, 75011 Paris",
+                "required": true
+            },
+            {
+                "key": "phoneNumber",
+                "value": "06 23 45 67 89",
+                "required": true
+            }
+        ],
+        "skills": [
+            "Gestion de campagnes Google Ads & Meta Ads",
+            "SEO / SEA",
+            "Analyse de performances (Google Analytics, Data Studio)",
+            "Copywriting & storytelling",
+            "Automatisation marketing"
+        ],
+        "spokenLanguages": [
+            {
+                "key": "lang1",
+                "value": "Français",
+                "level": "C2",
+                "required": true
+            },
+            {
+                "key": "lang2",
+                "value": "Anglais",
+                "level": "B2",
+                "required": false
+            }
+        ],
+        "hobbies": "Musique électronique, veille tech, growth hacking, voyage",
+        "resume": "Passionnée de communication numérique, j'aide les marques à accroître leur visibilité grâce à des stratégies data-driven et créatives.",
+        "jobs": [
+            {
+                "job": "Chargée de marketing digital",
+                "period": "2023-2025",
+                "extraInfo": "Agence WebPulse",
+                "description": "Pilotage de campagnes publicitaires multicanales, analyse de données et optimisation SEO/SEA."
+            },
+            {
+                "job": "Assistante communication",
+                "period": "2022-2023",
+                "extraInfo": "Start-up Greenly",
+                "description": "Création de contenus, gestion des réseaux sociaux, reporting et suivi des performances."
+            }
+        ],
+        "education": [
+            {
+                "school": "DU Marketing Digital — Université de Lyon",
+                "period": "2023",
+                "description": ""
+            },
+            {
+                "school": "Bootcamp Numérique Oreegami x Google",
+                "period": "2022",
+                "description": ""
+            }
+        ]
+    },
+    "layout": {
+        "sidebarSize": 240
+    },
+    "config": {
+        "limits": {
+            "personal": 2,
+            "contact": 5,
+            "skills": 10,
+            "spokenLanguages": 5,
+            "hobbies": 15,
+            "professionalXp": 10,
+            "education": 10,
+            "extraXp": 10
+        }
+    }
+}

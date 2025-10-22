@@ -11,11 +11,7 @@ const props = defineProps({
   cvData: {
     type: Object,
     required: true,
-  },
-  defaultCvData: {
-    type: Object,
-    required: true,
-  },
+  }
 });
 
 const $cv = computed(() => props.cvData.cv);

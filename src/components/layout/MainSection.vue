@@ -5,7 +5,7 @@ import TextareaSection from "../ui/TextareaSection.vue"
 import ButtonRemoveItem from "../ui/ButtonRemoveItem.vue";
 import ExpItem from "../blocks/ExpItem.vue"
 import vDraggable from '../../directives/draggable.js'
-
+import '../../assets/draggable.css'
 
 const cvData = defineModel('cvData', {
     type: Object,
@@ -23,6 +23,7 @@ const addItem = (key) => {
             [key]: [
                 ...$cv.value[key],
                 {
+                    "id": Date.now() + Math.random(),
                     "job": "",
                     "period": "",
                     "extraInfo": "",
@@ -44,9 +45,16 @@ const removeItem = (category, index) => {
     }
 }
 
-const handleReorder = ({ oldIndex, newIndex, element }) => {
-    console.log(element);
-    console.log(`Déplacé de ${oldIndex} vers ${newIndex}`);
+const handleReorder = ({ modelValue: reorderedItems }) => {
+    cvData.value =
+    {
+        ...cvData.value,
+        cv: {
+            ...$cv.value,
+            jobs:
+                reorderedItems
+        }
+    }
 }
 
 </script>
@@ -64,9 +72,12 @@ const handleReorder = ({ oldIndex, newIndex, element }) => {
             <ul class="list">
                 <div
                     v-for="(job, index) in $cv.jobs"
-                    :key="index"
+                    :key="job.id"
                     class="item"
-                    v-draggable="{ onReorder: handleReorder }"
+                    v-draggable="{
+                        modelValue: $cv.jobs,
+                        onReorder: handleReorder
+                    }"
                 >
                     <li class="experience">
                         <ExpItem

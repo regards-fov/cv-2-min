@@ -1,12 +1,22 @@
 <script setup>
-import { provide } from 'vue'
+import { ref, provide, toRef } from 'vue'
 import MainSection from "./components/layout/MainSection.vue";
 import Sidebar from "./components/layout/SideBar.vue";
 import { useLocalStorage } from "./composables/useLocalStorage";
-import defaultCvData from "./resources/defaultCvData.json";
+import cvType1 from "./resources/cvType1.json";
+import cvType2 from "./resources/cvType2.json";
+import cvType3 from "./resources/cvType3.json";
+
+const cvModels = {
+  'cvType1': cvType1,
+  'cvType2': cvType2,
+  'cvType3': cvType3
+};
+
+const currentModel = ref('cvType1');
 
 const dlJSON = () => {
-  const jsonLocalStorage = localStorage.getItem("cvData")
+  const jsonLocalStorage = localStorage.getItem(currentModel.value)
   const blob = new Blob([jsonLocalStorage], { type: 'text/plain' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -17,31 +27,33 @@ const dlJSON = () => {
   URL.revokeObjectURL(url)
 }
 
-const { value: data, clear: clearCvData } = useLocalStorage(
-  "cvData",
-  defaultCvData
-);
+const uls = useLocalStorage(currentModel.value, cvModels[currentModel.value])
+const data = toRef(uls, 'data')
 
-provide('cvData', data)
-provide('defaultCvData', defaultCvData)
+// watch(currentModel, () => {
+//   uls = useLocalStorage(currentModel.value, cvModels[currentModel.value])
+// })
+
+provide('cvData', uls.data)
+provide('defaultCvData', cvModels[currentModel.value])
 
 </script>
 
 <template>
   <!-- <button @click="print">Download PDF</button> -->
-  <button @click="clearCvData">Réinitialiser les données</button>
+  <button @click="uls.clear()">INIT CV</button>
+  <button @click="uls.load()">LOAD CV</button>
   <button @click="clearLayout">Réinitialiser le template</button>
   <button @click="dlJSON">Télécharger</button>
 
   <div id="container">
     <Sidebar
       :cvData="data"
-      :defaultCvData="defaultCvData"
       @update:cvData="data = $event"
     />
 
     <MainSection
-      :cvData="data"
+      :cvData="uls.data.value"
       @update:cvData="data = $event"
     />
 

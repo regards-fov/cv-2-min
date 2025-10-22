@@ -1,0 +1,106 @@
+{
+    "cv": {
+        "personal": [
+            {
+                "key": "username",
+                "value": "Élodie Garnier",
+                "required": true
+            },
+            {
+                "key": "job",
+                "value": "Éducatrice spécialisée",
+                "required": true
+            },
+            {
+                "key": "age",
+                "value": 34,
+                "required": false
+            }
+        ],
+        "picture": {
+            "path": "https://placehold.co/300x300?text=Elodie+Garnier",
+            "imageBorderRadius": 2
+        },
+        "contact": [
+            {
+                "key": "email",
+                "value": "elodie.garnier@email.com",
+                "required": true
+            },
+            {
+                "key": "address",
+                "value": "9 Rue des Oliviers, 13008 Marseille",
+                "required": true
+            },
+            {
+                "key": "phoneNumber",
+                "value": "06 12 98 76 54",
+                "required": true
+            }
+        ],
+        "skills": [
+            "Accompagnement d'adolescents en difficulté",
+            "Médiation et écoute active",
+            "Travail en équipe pluridisciplinaire",
+            "Gestion de conflits",
+            "Animation d'ateliers socio-éducatifs"
+        ],
+        "spokenLanguages": [
+            {
+                "key": "lang1",
+                "value": "Français",
+                "level": "C2",
+                "required": true
+            },
+            {
+                "key": "lang2",
+                "value": "Anglais",
+                "level": "B1",
+                "required": false
+            }
+        ],
+        "hobbies": "Lecture, randonnée, psychologie, engagement associatif",
+        "resume": "Éducatrice spécialisée attentive et investie, axée sur la relation d'aide et le développement des compétences psychosociales.",
+        "jobs": [
+            {
+                "job": "Éducatrice spécialisée (faisant fonction)",
+                "period": "2023-2025",
+                "extraInfo": "Foyer La Source",
+                "description": "Accompagnement d'adolescents en situation de rupture familiale, suivi individuel et projets d'autonomie."
+            },
+            {
+                "job": "Animatrice socio-culturelle",
+                "period": "2021-2023",
+                "extraInfo": "MJC Saint-Barnabé",
+                "description": "Organisation d'ateliers éducatifs, coordination d'événements culturels et travail de médiation."
+            }
+        ],
+        "education": [
+            {
+                "school": "DU Adolescents difficiles — Université de Cergy",
+                "period": "2025",
+                "description": ""
+            },
+            {
+                "school": "Formation Cogito'z : Psychologie de l'attachement",
+                "period": "2024",
+                "description": ""
+            }
+        ]
+    },
+    "layout": {
+        "sidebarSize": 240
+    },
+    "config": {
+        "limits": {
+            "personal": 2,
+            "contact": 5,
+            "skills": 10,
+            "spokenLanguages": 5,
+            "hobbies": 15,
+            "professionalXp": 10,
+            "education": 10,
+            "extraXp": 10
+        }
+    }
+}

@@ -1,0 +1,106 @@
+{
+    "cv": {
+        "personal": [
+            {
+                "key": "username",
+                "value": "Lucas Morel",
+                "required": true
+            },
+            {
+                "key": "job",
+                "value": "Développeur full-stack",
+                "required": true
+            },
+            {
+                "key": "age",
+                "value": 30,
+                "required": false
+            }
+        ],
+        "picture": {
+            "path": "https://placehold.co/300x300?text=Lucas+Morel",
+            "imageBorderRadius": 2
+        },
+        "contact": [
+            {
+                "key": "email",
+                "value": "lucas.moreldev@gmail.com",
+                "required": true
+            },
+            {
+                "key": "address",
+                "value": "25 Avenue de Toulouse, 31000 Toulouse",
+                "required": true
+            },
+            {
+                "key": "phoneNumber",
+                "value": "07 11 22 33 44",
+                "required": true
+            }
+        ],
+        "skills": [
+            "PHP, Symfony, Laravel",
+            "JavaScript, Vue.js, React",
+            "MySQL, API REST",
+            "CI/CD, Docker",
+            "Tests unitaires, Git"
+        ],
+        "spokenLanguages": [
+            {
+                "key": "lang1",
+                "value": "Français",
+                "level": "C2",
+                "required": true
+            },
+            {
+                "key": "lang2",
+                "value": "Anglais",
+                "level": "C1",
+                "required": false
+            }
+        ],
+        "hobbies": "Open source, IA générative, gaming, électronique DIY",
+        "resume": "Développeur full-stack spécialisé en PHP et JavaScript, orienté performance et automatisation.",
+        "jobs": [
+            {
+                "job": "Développeur full-stack",
+                "period": "2021-2025",
+                "extraInfo": "Freelance",
+                "description": "Développement d'applications web sur mesure, automatisation de processus et intégration d'API REST."
+            },
+            {
+                "job": "Développeur web junior",
+                "period": "2020-2021",
+                "extraInfo": "Agence DevZone",
+                "description": "Maintenance et amélioration de sites clients, refonte front-end sous Vue.js et Symfony."
+            }
+        ],
+        "education": [
+            {
+                "school": "BTS SIO option SLAM",
+                "period": "2019-2021",
+                "description": ""
+            },
+            {
+                "school": "OpenClassrooms : parcours 'Développeur web'",
+                "period": "2021",
+                "description": ""
+            }
+        ]
+    },
+    "layout": {
+        "sidebarSize": 240
+    },
+    "config": {
+        "limits": {
+            "personal": 2,
+            "contact": 5,
+            "skills": 10,
+            "spokenLanguages": 5,
+            "hobbies": 15,
+            "professionalXp": 10,
+            "education": 10,
+            "extraXp": 10
+        }
+    }
+}

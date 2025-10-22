@@ -60,24 +60,28 @@
         "resume": "PhD in Biomechanical Engineering with 10+ years of expertise in orthopedic implantable medical devices, including dental, maxillofacial, spine, hip, and knee implants. Experienced in leading multidisciplinary teams, advancing industrial R&D, and driving innovative solutions to complex technical challenges. Recognized for bridging research and development with practical applications to deliver high-impact medical technologies. Eager to contribute to transformative projects in a dynamic, collaborative environment.",
         "jobs": [
             {
+                "id": "1235411",
                 "job": "Eleveur de hérissons",
                 "period": "2022-2024",
                 "extraInfo": "",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
             },
             {
+                "id": "1652311",
                 "job": "Consultant - Medical Devices",
                 "period": "2019-2020",
                 "extraInfo": " (Malta, Canada, Belgium, France)",
                 "description": "Advised startups and SMEs on ISO/FDA compliance, biomechanical testing, and R&D; strategy."
             },
             {
+                "id": "1657311",
                 "job": "Développeur web chez Avis Vérifiés - Skeepers",
                 "period": "2018",
                 "extraInfo": "stage de 6 mois",
                 "description": "Développement full stack (front end - back end). Développement et intégration de modules de restitution des avis clients pour différentes solutions e-commerce (Prestashop, WooCommerce, Shopify). \n Développement d’une solution pour le département Sales, avec construction d’une API REST. Support client, tests automatisés, documentation."
             },
             {
+                "id": "1652318",
                 "job": "Eleveur de bestioles",
                 "period": "2016-2017",
                 "extraInfo": "",

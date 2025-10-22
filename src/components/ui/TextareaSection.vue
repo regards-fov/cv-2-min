@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, useTemplateRef, onMounted, nextTick, computed } from "vue"
+import { ref, useTemplateRef, onMounted, nextTick, computed, watch } from "vue"
 
 const model = defineModel({
     modelValue: String
@@ -30,6 +30,15 @@ const heightAdjust = async () => {
         ta.value.style.height = ta.value.scrollHeight + 'px'
     })
 }
+
+watch(model, () => {
+    heightAdjust()
+})
+
+watch(() => props.name, (newName) => {
+    label.value = newName
+    heightAdjust()
+})
 
 const getPlaceholder = () => {
     switch (label.value) {
