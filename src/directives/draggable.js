@@ -53,11 +53,8 @@ export const draggable = {
             e.dataTransfer.effectAllowed = 'move';
             e.dataTransfer.setData('text/plain', el.dataset.id || '');
 
-            console.log(options.dragImage !== false);
-
             if (options.dragImage !== false) {
                 const ghost = el.cloneNode(true);
-                console.log(ghost);
                 ghost.style.opacity = '0.7';
                 ghost.style.transform = 'rotate(2deg)';
                 document.body.appendChild(ghost);

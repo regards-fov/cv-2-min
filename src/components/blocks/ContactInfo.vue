@@ -49,9 +49,11 @@ const removeContact = (index) => {
                 class="hoverable"
             >
                 <ItemEditable
+                    class="contact-item"
                     :label="contact.key"
                     v-model="cvData.cv.contact[index].value"
                     :must-focus="focusTarget === cvData.cv.contact.length"
+                    placeholder="Nouveau contact"
                 />
 
                 <ButtonRemoveItem

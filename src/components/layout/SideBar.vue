@@ -34,7 +34,7 @@ const handleSidebarResize = (event) => {
     id="sidebar"
     class="sidebar"
     v-sidebar-resizer="{
-      minWidth: 238,
+      minWidth: 234,
       maxWidth: 340,
       userWidth: props.cvData.layout.sidebarSize,
     }"
@@ -87,7 +87,7 @@ const handleSidebarResize = (event) => {
   flex-flow: column nowrap;
   justify-content: flex-start;
   width: var(--sidebar-width);
-  gap: 8px;
+  gap: 4px;
 }
 
 .infos {
@@ -105,21 +105,21 @@ const handleSidebarResize = (event) => {
   font-size: larger;
   font-weight: bold;
   color: #f0f1f1;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .contact,
 .skills,
 .languages {
   border-radius: 6px;
-  padding: 15px 15px 4px 15px;
+  padding: 14px 12px 4px 12px;
 }
 
 .hobbies {
   padding: 15px 13px;
 
   .sidebar-label {
-    padding: 2px;
+    padding: 0 2px;
   }
 
   .textarea-section {
@@ -138,7 +138,7 @@ const handleSidebarResize = (event) => {
 :deep(.list) {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   margin: 4px 0 -8px 0px;
 
   li {
@@ -146,7 +146,6 @@ const handleSidebarResize = (event) => {
     list-style: none;
     position: relative;
     padding-left: 2px;
-    justify-content: space-between;
     align-items: center;
 
     .drag-icon {
@@ -159,7 +158,14 @@ const handleSidebarResize = (event) => {
 
     .removeItem {
       margin-top: 0;
+      position: absolute;
+      display: flex;
+      top: 0;
+      right: 0;
+      height: 100%;
+      align-items: center;
     }
+
 
     &:focus-within {
       box-shadow: 0 0 0 2px Highlight;

@@ -47,7 +47,7 @@ const getPlaceholder = () => {
         case "resume":
             return 'Votre profil et motivations en quelques lignes';
         default:
-            return 'Description du poste';
+            return 'Description';
     }
 }
 

@@ -17,6 +17,7 @@ const $cv = computed(() => cvData.value.cv);
 const isDragging = ref(false)
 
 const addItem = (key) => {
+
     cvData.value =
     {
         ...cvData.value,
@@ -26,7 +27,7 @@ const addItem = (key) => {
                 ...$cv.value[key],
                 {
                     "id": Date.now() + Math.random(),
-                    "job": "",
+                    [key === 'jobs' ? 'job' : 'school']: "",
                     "period": "",
                     "extraInfo": "",
                     "description": ""
@@ -48,7 +49,6 @@ const removeItem = (category, index) => {
 }
 
 const onStartDrag = (e) => {
-    console.log(e.item);
     isDragging.value = true
     e.item.classList.add('is-placeholder')
 }
@@ -185,8 +185,7 @@ const onEndDrag = (e) => {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    margin-left: 12px;
-    padding: 0 10px;
+    padding: 0 12px;
 
     & *:focus:not(.addItemButton) {
         box-shadow: 0 0 0 2px #667eea;
@@ -195,8 +194,8 @@ const onEndDrag = (e) => {
 }
 
 #resume {
-    margin-top: 19px;
-    margin-bottom: 10px;
+    margin-top: 27px;
+    margin-bottom: 7px;
     hyphens: auto;
 }
 
@@ -210,21 +209,25 @@ const onEndDrag = (e) => {
     min-width: 0;
     align-items: stretch;
     border-radius: 4px;
+    font-size: 11.5pt;
 }
 
 .experience-item {
-    padding: 4px 2px 4px 0;
+    padding: 4px 2px 1px 0;
 }
 
 :deep(#ta-resume) {
-    font-size: 12pt;
-    line-height: 14pt;
+    font-size: 11pt;
+}
+
+:deep(.textarea-section) {
+    text-align: justify;
 }
 
 .main-label {
     display: inline-flex;
     padding-right: 4px;
-    font-size: x-large;
+    font-size: 15pt;
     border-bottom: 2px solid #cbcfd1;
 }
 
@@ -266,7 +269,7 @@ li {
 
 .list {
     padding-left: 0;
-    margin: 6px auto;
+    margin: 4px auto;
 }
 </style>
 

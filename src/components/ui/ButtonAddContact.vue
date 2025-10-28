@@ -33,10 +33,9 @@ function getUpcomingValue() {
             value: firstMissing.value,
         };
     }
-
     return {
         key: 'extraInfo',
-        value: "LinkedIn, site perso, Twitter/X...",
+        value: "",
     };
 }
 

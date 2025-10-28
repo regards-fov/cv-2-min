@@ -6,7 +6,8 @@ import vAutoResize from '../../directives/autoResize'
 
 const props = defineProps({
     label: String,
-    mustFocus: Boolean
+    mustFocus: Boolean,
+    placeholder: String
 })
 
 const modelValue = defineModel({ type: String })
@@ -14,6 +15,7 @@ const modelValue = defineModel({ type: String })
 const emit = defineEmits(['handleExtra'])
 
 const editing = ref(false)
+
 const inputRef = ref(null)
 
 const isEmpty = computed(() =>
@@ -52,14 +54,14 @@ const handleBlur = () => {
 </script>
 <template>
     <div
-        :class="['extra-padding', label, 'hoverable', { 'greyed-out': isEmpty }]"
+        :class="[label, 'extra-padding', 'hoverable', { 'greyed - out': isEmpty }]"
         :id="label"
         v-show="!editing"
         @click="editing = true"
         v-bind="$attrs"
         :data-attribute="label"
     >
-        {{ modelValue || label }}
+        {{ modelValue !== '' ? modelValue : props.placeholder }}
     </div>
     <input
         class="extra-padding"
@@ -71,7 +73,7 @@ const handleBlur = () => {
         v-auto-resize
         @blur="handleBlur"
         @keydown="handleKeydown"
-        :placeholder="modelValue"
+        :placeholder=props.placeholder
         v-model="modelValue"
     />
 </template>
@@ -109,6 +111,11 @@ const handleBlur = () => {
 .xtra-label,
 .xtra-label-input {
     font-weight: bold;
+}
+
+.skill,
+.contact-item {
+    flex: 1;
 }
 
 .date,

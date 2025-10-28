@@ -30,10 +30,12 @@ const handleExtra = () => {
 const config = {
     jobs: {
         mainField: 'job',
+        placeholder: 'Emploi',
         hasExtraInfo: true
     },
     education: {
         mainField: 'school',
+        placeholder: 'Intitulé',
         hasExtraInfo: false
     }
 }
@@ -44,9 +46,10 @@ const category = config[props.type]
 <template>
     <div class="left">
         <ItemEditable
-            class="date"
+            class="date extra-padding"
             label="date"
             v-model="modelValue.period"
+            placeholder="Date"
         />
         <div class="drag-icon draggable">
             <font-awesome-icon icon="fa-solid fa-list" />
@@ -54,8 +57,10 @@ const category = config[props.type]
     </div>
     <div class="right">
         <ItemEditable
+            class="job-label extra-padding"
             label="label"
             v-model="modelValue[category.mainField]"
+            :placeholder="category.placeholder"
         />
 
         <div v-if="category.hasExtraInfo">
@@ -68,7 +73,6 @@ const category = config[props.type]
                     icon="fa-regular fa-circle-xmark"
                     class="plus-button"
                 />
-
             </div>
 
             <div
@@ -145,16 +149,13 @@ const category = config[props.type]
     width: 100%;
 }
 
-// .ta-desc:hover {
-//     border-radius: 5px;
-//     background-color: rgb(236, 236, 236);
-//     color: #8a8a8a;
-//     box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
-// }
+:deep(.ta-desc) {
+    font-size: 10.3pt;
+}
 
 .add-extra-info {
     position: relative;
-    height: 4px;
+    height: 0px;
     cursor: pointer;
 
     &::before {

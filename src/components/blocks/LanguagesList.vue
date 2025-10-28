@@ -33,7 +33,6 @@ const addLanguage = () => {
 }
 
 const removeItem = (index) => {
-    console.log(cvData.value.cv.spokenLanguages);
     cvData.value = {
         ...cvData.value,
         cv: {

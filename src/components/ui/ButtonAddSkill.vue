@@ -3,7 +3,7 @@
 const emit = defineEmits(["addSkill"]);
 
 const handleAddSkill = () => {
-    emit('addSkill', 'Nouvelle compétence');
+    emit('addSkill');
 };
 
 </script>

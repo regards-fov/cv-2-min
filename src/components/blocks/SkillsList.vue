@@ -13,12 +13,12 @@ const focusNewInput = async (keys) => {
 
 const focusTarget = ref(null);
 
-const addSkills = (value) => {
+const addSkills = () => {
     cvData.value = {
         ...cvData.value,
         cv: {
             ...cvData.value.cv,
-            skills: [...cvData.value.cv['skills'], value]
+            skills: [...cvData.value.cv['skills'], ""]
         }
     }
 
@@ -50,9 +50,10 @@ const removeSkill = (index) => {
                 class="hoverable"
             >
                 <ItemEditable
-                    :label="'skills'"
+                    :label="'skill'"
                     v-model="cvData.cv.skills[index]"
                     :must-focus="focusTarget === (cvData.cv.skills.length)"
+                    placeholder="Nouvelle compétence"
                 />
 
                 <ButtonRemoveItem

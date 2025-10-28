@@ -27,7 +27,7 @@ const personal = defineModel({
         </div>
         <div
             v-resizer="{ minFontSize: 14, default: 18, id: 'lookup-job' }"
-            style="width: 100%;"
+            style="width: 100%;margin-top: -4px;"
         >
             <ItemEditable
                 class="lookup-job"
@@ -42,6 +42,6 @@ const personal = defineModel({
 .personal {
     display: flex;
     flex-wrap: wrap;
-    padding: 0 3px;
+    padding: 0 1px;
 }
 </style>

@@ -13,7 +13,7 @@ const cvModels = {
   'cvType3': cvType3
 };
 
-const currentModel = ref('cvType1');
+const currentModel = ref('cvType2');
 
 const dlJSON = () => {
   const jsonLocalStorage = localStorage.getItem(currentModel.value)
@@ -33,7 +33,7 @@ const data = toRef(uls, 'data')
 const exportToPDF = async () => {
   if ('print' in window) {
     const beforePrint = () => {
-      document.title = 'Mon_Document';
+      document.title = 'Mon_CV';
     };
 
     window.addEventListener('beforeprint', beforePrint);
