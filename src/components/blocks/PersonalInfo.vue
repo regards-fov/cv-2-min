@@ -3,7 +3,6 @@
 import ItemEditable from '../ui/ItemEditable.vue'
 import vResizer from '../../directives/textResizer'
 
-
 const personal = defineModel({
     type: Array,
     default: ''

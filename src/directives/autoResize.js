@@ -34,7 +34,6 @@ export const autoResize = {
             // Définir le contenu
             mirror.textContent = el.value || el.placeholder || ''
 
-
             // Calculer dimensions
             const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0
             const paddingRight = parseFloat(computedStyle.paddingRight) || 0
@@ -59,10 +58,8 @@ export const autoResize = {
         // Écouter les changements
         el.addEventListener('input', adjustWidth)
 
-        // Ajustement initial avec délai pour s'assurer que tout est monté
-        setTimeout(adjustWidth, 0)
+        setTimeout(adjustWidth, 10)
 
-        // Ajuster après chargement des fonts
         if (document.fonts) {
             document.fonts.ready.then(adjustWidth)
         }

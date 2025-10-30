@@ -1,8 +1,10 @@
 <script setup>
-import { ref, provide, toRef } from 'vue'
+import { ref, provide, computed, watch } from 'vue'
 import MainSection from "./components/layout/MainSection.vue";
 import Sidebar from "./components/layout/SideBar.vue";
 import { useLocalStorage } from "./composables/useLocalStorage";
+import { dataToJson } from "./utils/dataToJson";
+import { exportToPDF } from "./utils/toPDF";
 import cvType1 from "./resources/cvType1.json";
 import cvType2 from "./resources/cvType2.json";
 import cvType3 from "./resources/cvType3.json";
@@ -15,60 +17,67 @@ const cvModels = {
 
 const currentModel = ref('cvType1');
 
-const dlJSON = () => {
-  const jsonLocalStorage = localStorage.getItem(currentModel.value)
-  const blob = new Blob([jsonLocalStorage], { type: 'text/plain' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'cvData.json'
-  a.click()
-
-  URL.revokeObjectURL(url)
-}
-
-const uls = useLocalStorage(currentModel.value, cvModels[currentModel.value])
-const data = toRef(uls, 'data')
-
-const exportToPDF = async () => {
-  if ('print' in window) {
-    const beforePrint = () => {
-      document.title = 'Mon_CV';
-    };
-
-    window.addEventListener('beforeprint', beforePrint);
-    window.print();
-    window.removeEventListener('beforeprint', beforePrint);
-  }
+// Fonction pour créer une nouvelle instance de storage
+const createStorage = (modelKey) => {
+  return useLocalStorage(modelKey, cvModels[modelKey]);
 };
 
-// watch(currentModel, () => {
-//   uls = useLocalStorage(currentModel.value, cvModels[currentModel.value])
-// })
+// Instance actuelle du storage
+let uls = createStorage(currentModel.value);
 
-provide('cvData', uls.data)
-provide('defaultCvData', cvModels[currentModel.value])
+// Reactive ref pour les données
+const cvData = ref(uls.data.value);
 
+// Watch pour synchroniser les changements de données avec le localStorage
+watch(cvData, (newData) => {
+  uls.data.value = newData;
+}, { deep: true });
+
+// Fonction pour charger un nouveau modèle
+const loadModel = (model) => {
+  currentModel.value = model;
+  // Créer une nouvelle instance de storage
+  uls = createStorage(model);
+  // Mettre à jour les données réactives
+  cvData.value = uls.data.value;
+};
+
+// Fonction pour réinitialiser le CV
+const initCV = () => {
+  uls.clear();
+  cvData.value = uls.data.value;
+};
+
+// Provide pour les composants enfants
+provide('cvData', cvData);
+provide('defaultCvData', computed(() => cvModels[currentModel.value]));
+
+// Fonction de téléchargement
+const downloadJson = () => {
+  dataToJson(cvData.value, currentModel.value);
+};
 </script>
 
 <template>
-  <button @click="exportToPDF">Exporter PDF</button>
-  <button @click="uls.clear()">INIT CV</button>
-  <button @click="uls.load()">LOAD CV</button>
-  <button @click="clearLayout">Réinitialiser le template</button>
-  <button @click="dlJSON">Télécharger</button>
+  <div>
+    <button @click="exportToPDF">Exporter PDF</button>
+    <button @click="initCV">INIT CV</button>
+    <button @click="loadModel('cvType1')">LOAD CV MODEL 1</button>
+    <button @click="loadModel('cvType2')">LOAD CV MODEL 2</button>
+    <button @click="loadModel('cvType3')">LOAD CV MODEL 3</button>
+    <button @click="downloadJson">Télécharger</button>
 
-  <div id="a4-container">
-    <Sidebar
-      :cvData="data"
-      @update:cvData="data = $event"
-    />
+    <div id="a4-container">
+      <Sidebar
+        :cvData="cvData"
+        @update:cvData="cvData = $event"
+      />
 
-    <MainSection
-      :cvData="uls.data.value"
-      @update:cvData="data = $event"
-    />
-
+      <MainSection
+        :cvData="cvData"
+        @update:cvData="cvData = $event"
+      />
+    </div>
   </div>
 </template>
 

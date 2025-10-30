@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, useTemplateRef, onMounted, nextTick, computed, watch } from "vue"
+import { ref, useTemplateRef, onMounted, nextTick, computed, watch, getCurrentInstance } from "vue"
 
 const model = defineModel({
     modelValue: String
@@ -36,8 +36,10 @@ watch(model, () => {
 })
 
 watch(() => props.name, (newName) => {
+    console.log(newName);
+    console.log(props.name);
     label.value = newName
-    heightAdjust()
+    // heightAdjust()
 })
 
 const getPlaceholder = () => {
@@ -51,7 +53,12 @@ const getPlaceholder = () => {
     }
 }
 
-onMounted(heightAdjust)
+onMounted(() => {
+    if (document.fonts) {
+        document.fonts.ready.then(heightAdjust)
+    }
+    else heightAdjust()
+})
 
 </script>
 
