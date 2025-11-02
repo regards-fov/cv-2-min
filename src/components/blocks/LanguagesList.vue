@@ -52,45 +52,50 @@ const removeItem = (index) => {
             <li
                 v-for="(language, index) in cvData.cv.spokenLanguages"
                 :key="language.key"
-                class="hoverable"
             >
-                <label>
-                    <select
-                        name="language-name"
-                        :id="`language-select-${index}`"
-                        class="language-select"
-                        v-model="cvData.cv.spokenLanguages[index].value"
-                    >
-                        <option value="">--</option>
-                        <option
-                            v-for="item in languageList"
-                            :key="item.code"
-                            :value="item.name"
-                        >
-                            {{ item.name }}
-                        </option>
-                    </select>
-                </label>
-
-                <label :for="`level-select-${index}`"></label>
-                <select
-                    name="language-level"
-                    :id="`level-select-${index}`"
-                    v-model="cvData.cv.spokenLanguages[index].level"
+                <div
+                    class="hoverable"
+                    style="display: flex; flex: 1;flex-direction: row;justify-content: space-between;"
                 >
-                    <option value="--">--</option>
-                    <option value="A1">A1</option>
-                    <option value="A2">A2</option>
-                    <option value="B1">B1</option>
-                    <option value="B2">B2</option>
-                    <option value="C1">C1</option>
-                    <option value="C2">C2</option>
-                </select>
 
-                <ButtonRemoveItem
-                    :show="cvData.cv.spokenLanguages.length > 1"
-                    @delete="removeItem(index)"
-                />
+                    <label>
+                        <select
+                            name="language-name"
+                            :id="`language-select-${index}`"
+                            class="language-select"
+                            v-model="cvData.cv.spokenLanguages[index].value"
+                        >
+                            <option value="">--</option>
+                            <option
+                                v-for="item in languageList"
+                                :key="item.code"
+                                :value="item.name"
+                            >
+                                {{ item.name }}
+                            </option>
+                        </select>
+                    </label>
+
+                    <label :for="`level-select-${index}`"></label>
+                    <select
+                        name="language-level"
+                        :id="`level-select-${index}`"
+                        v-model="cvData.cv.spokenLanguages[index].level"
+                    >
+                        <option value="--">--</option>
+                        <option value="A1">A1</option>
+                        <option value="A2">A2</option>
+                        <option value="B1">B1</option>
+                        <option value="B2">B2</option>
+                        <option value="C1">C1</option>
+                        <option value="C2">C2</option>
+                    </select>
+
+                    <ButtonRemoveItem
+                        :show="cvData.cv.spokenLanguages.length > 1"
+                        @delete="removeItem(index)"
+                    />
+                </div>
 
             </li>
             <!-- <div> (TOEIC 960/990) </div> -->

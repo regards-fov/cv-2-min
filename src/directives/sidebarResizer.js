@@ -17,7 +17,7 @@ export default {
             height: 100%;
             cursor: ew-resize;
             background: transparent;
-            z-index: 10;
+            z-index: 3;
             border-radius: 5px;
             `
         handle.style.transition = 'background 0.2s'

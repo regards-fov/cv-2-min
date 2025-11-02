@@ -47,28 +47,30 @@ const removeSkill = (index) => {
             <li
                 v-for="(skill, index) in cvData.cv.skills"
                 :key="index"
-                class="hoverable"
             >
-                <ItemEditable
-                    :label="'skill'"
-                    v-model="cvData.cv.skills[index]"
-                    :must-focus="focusTarget === (cvData.cv.skills.length)"
-                    placeholder="Nouvelle compétence"
-                />
-
-                <ButtonRemoveItem
-                    :show="cvData.cv.skills.length > 1"
-                    @click="removeSkill(index)"
-                />
+                <div class="hoverable item">
+                    <ItemEditable
+                        :label="'skill'"
+                        v-model="cvData.cv.skills[index]"
+                        :must-focus="focusTarget === (cvData.cv.skills.length)"
+                        placeholder="Nouvelle compétence"
+                    />
+                    <ButtonRemoveItem
+                        :show="cvData.cv.skills.length > 1"
+                        @click="removeSkill(index)"
+                    />
+                </div>
             </li>
-
             <ButtonAddSkill @addSkill="addSkills" />
-
         </ul>
     </div>
 </template>
 <style scoped>
 .skills {
     hyphens: auto;
+}
+
+.item {
+    flex: 1;
 }
 </style>

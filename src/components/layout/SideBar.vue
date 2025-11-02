@@ -138,23 +138,20 @@ const handleSidebarResize = (event) => {
 :deep(.list) {
   display: flex;
   flex-direction: column;
-  gap: 3px;
   margin: 4px 0 -8px 0px;
+  gap: 3px;
+
+  &>div {
+    border: 1px solid;
+  }
 
   li {
     display: flex;
     list-style: none;
     position: relative;
-    padding-left: 2px;
     align-items: center;
-
-    .drag-icon {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-items: center;
-      margin-left: -15px;
-    }
+    margin-right: -10px;
+    padding-right: 10px;
 
     .removeItem {
       margin-top: 0;
@@ -164,21 +161,82 @@ const handleSidebarResize = (event) => {
       right: 0;
       height: 100%;
       align-items: center;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: -18px;
+        margin-left: 11px;
+      }
     }
 
-
-    &:focus-within {
+    &:focus-within .hoverable {
       box-shadow: 0 0 0 2px Highlight;
       border-radius: 5px;
     }
 
-    &:hover>.removeItem {
+    &:hover .removeItem,
+    .removeItem:hover {
       opacity: var(--colorful-opacity);
+      transform: translateX(86%);
     }
   }
 
   & p {
     margin: 0 0;
   }
+}
+
+:deep(.list li) {
+  display: flex;
+  list-style: none;
+  position: relative;
+  padding-left: 22px;
+  margin-left: -20px;
+  align-items: center;
+
+  .drag-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    background-color: #48a8c0;
+    color: white;
+    padding: 3px;
+    border-radius: 6px;
+    pointer-events: all;
+    white-space: nowrap;
+    opacity: 0;
+    box-shadow: 0 4px 12px rgba(96, 135, 208, 0.3);
+    transition: all 0.3s ease;
+    cursor: grab;
+
+    &:hover {
+      background-color: #48a8c0;
+    }
+
+    &:active {
+      border: 1px solid yellow;
+      opacity: 1 !important;
+    }
+  }
+
+  &:hover .drag-icon {
+    opacity: 1;
+    transform: translateY(-50%) translateX(-50%);
+  }
+
+  &.is-dragging .drag-icon {
+    opacity: 0 !important;
+  }
+
 }
 </style>
