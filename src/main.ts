@@ -16,8 +16,9 @@ library.add(fas, far, fab)
 const app = createApp(App)
 
 const gtag = createGtag({
-  tagId: "GA_MEASUREMENT_ID"
+  tagId:  "G-5F1ZH0FHK5"
 })
+
 app.use(gtag)
 
 app.config.performance = true
