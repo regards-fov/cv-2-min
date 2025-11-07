@@ -9,12 +9,18 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import colorWheel from './directives/colorWheel'
 import sidebarResizer from './directives/sidebarResizer'
 import wcagAdapter from './directives/wcagAdapter'
+import { createGtag } from "vue-gtag";
 
 library.add(fas, far, fab)
 
 const app = createApp(App)
-app.config.performance = true
 
+const gtag = createGtag({
+  tagId: "GA_MEASUREMENT_ID"
+})
+app.use(gtag)
+
+app.config.performance = true
 
 app.component('font-awesome-icon', FontAwesomeIcon)
 
