@@ -2,6 +2,8 @@
 
 import { ref, computed, nextTick, onMounted, watch, inject } from "vue"
 import vFocus from '../../directives/inputFocus'
+import { useEditingState } from '@/composables/useEditingState'
+
 
 const cvData = inject('cvData')
 
@@ -18,6 +20,9 @@ const customFontSize = computed(() => {
 })
 
 const modelValue = defineModel({ type: String })
+
+const { startEditing, endEditing } = useEditingState()
+
 
 const emit = defineEmits(['handleExtra'])
 
@@ -50,6 +55,8 @@ const heightAdjust = () => {
 
 const activateEditing = async () => {
     editing.value = true
+    startEditing()
+
     await nextTick()
     textareaRef.value?.focus()
     heightAdjust()
@@ -67,6 +74,7 @@ const handleKeydown = (e) => {
 
 const handleBlur = () => {
     editing.value = false
+    endEditing()
     emit('handleExtra')
 }
 

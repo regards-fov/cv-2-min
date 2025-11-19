@@ -1,7 +1,7 @@
 <script setup>
-
 import { ref, watch, computed, nextTick, onMounted } from "vue"
 import vFocus from '../../directives/inputFocus'
+import { useEditingState } from '@/composables/useEditingState'
 
 const props = defineProps({
     label: String,
@@ -11,11 +11,12 @@ const props = defineProps({
 
 const modelValue = defineModel({ type: String })
 
+const { startEditing, endEditing } = useEditingState()
+
 const emit = defineEmits(['handleExtra'])
 
 const editing = ref(false)
 const inputRef = ref(null)
-
 const isEmpty = computed(() => !modelValue.value)
 
 const fieldClasses = computed(() => [
@@ -32,6 +33,7 @@ const inputClasses = computed(() => [
 
 const activateEditing = () => {
     editing.value = true
+    startEditing()
     nextTick(() => {
         inputRef.value?.focus()
     })
@@ -53,9 +55,9 @@ const handleKeydown = (e) => {
 
 const handleBlur = () => {
     editing.value = false
+    endEditing()
     emit('handleExtra')
 }
-
 </script>
 
 <template>

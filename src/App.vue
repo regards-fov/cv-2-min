@@ -167,11 +167,6 @@ const handleMouseUp = () => {
   border-radius: 4px;
   scrollbar-width: none;
   padding: 2px;
-
-  // &:focus-within {
-  //   box-shadow: 0 0 0 2px Highlight;
-  //   border-radius: 5px;
-  // }
 }
 
 :deep(textarea::-webkit-scrollbar) {

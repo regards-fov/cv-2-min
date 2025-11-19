@@ -72,9 +72,6 @@ const category = config[props.type]
                     v-model="modelValue.period"
                     placeholder="Date"
                 />
-                <!-- <div class="drag-icon draggable">
-                    <font-awesome-icon icon="fa-solid fa-list" />
-                /div> -->
             </div>
         </div>
         <div v-if="category.hasExtraInfo">
@@ -83,10 +80,7 @@ const category = config[props.type]
                 class="add-extra-info"
                 @click="toggleExtraInfo"
             >
-                <font-awesome-icon
-                    icon="fa-regular fa-circle-xmark"
-                    class="plus-button"
-                />
+                <div class="plus-button">+</div>
             </div>
 
             <div

@@ -49,10 +49,6 @@ export default {
       console.log(el);
       el.style.fontSize = `${newSize}pt`;
 
-      // targets.forEach(target => {
-      //   target.style.fontSize = `${newSize}pt`;
-      // });
-
       cvData.layout.fontSize[name] = newSize;
       console.log('💾 cvData.layout.fontSize:', cvData.layout.fontSize);
 

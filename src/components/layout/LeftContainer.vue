@@ -7,7 +7,7 @@ import ColorPicker from '../ui/ColorPicker.vue';
 import LayoutSelector from '../ui/LayoutSelector.vue'
 import chevronDown from '@icons/chevron.svg'
 
-const { currentModel, initCV, loadModel } = useCvState();
+const { currentModel, initCV } = useCvState();
 
 defineProps({
     isColorWheelOpen: {
@@ -37,9 +37,6 @@ const downloadJson = () => {
             <button @click="exportToPDF">Exporter en PDF</button>
             <button @click="initCV">Réinitialiser les données</button>
             <div v-show="isLocalhost">
-                <!-- <button @click="() => loadModel('cvType1')">Charger le modèle n°1</button> -->
-                <!-- <button @click="() => loadModel('cvType2')">Charger le modèle n°2</button> -->
-                <!-- <button @click="() => loadModel('cvType3')">Charger le modèle n°3</button> -->
                 <button
                     v-show="isLocalhost"
                     @click="downloadJson"

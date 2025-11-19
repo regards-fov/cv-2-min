@@ -206,11 +206,6 @@ const handleClick = (e) => {
       }
     }
 
-    // &:focus-within .hoverable {
-    //   box-shadow: 0 0 0 2px Highlight;
-    //   border-radius: 5px;
-    // }
-
     &:hover .removeItem,
     .removeItem:hover {
       opacity: var(--colorful-opacity);
@@ -227,48 +222,8 @@ const handleClick = (e) => {
   display: flex;
   list-style: none;
   position: relative;
-  padding-left: 22px;
-  margin-left: -20px;
+  padding-left: 1px;
   align-items: center;
 
-  .drag-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    background-color: #48a8c0;
-    color: white;
-    padding: 3px;
-    border-radius: 6px;
-    pointer-events: all;
-    white-space: nowrap;
-    opacity: 0;
-    box-shadow: 0 4px 12px rgba(96, 135, 208, 0.3);
-    transition: all 0.3s ease;
-    cursor: grab;
-
-    &:hover {
-      background-color: #48a8c0;
-    }
-
-    &:active {
-      opacity: 1 !important;
-    }
-  }
-
-  &:hover .drag-icon {
-    opacity: 1;
-    transform: translateY(-50%) translateX(-50%);
-  }
-
-  &.is-dragging .drag-icon,
-  &.is-dragging .removeItem {
-    opacity: 0 !important;
-  }
 }
 </style>

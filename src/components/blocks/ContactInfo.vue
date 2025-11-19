@@ -4,15 +4,24 @@ import ButtonAddContact from "../ui/ButtonAddContact.vue";
 import ItemEditable from '../ui/ItemEditable.vue'
 import ButtonRemoveItem from "../ui/ButtonRemoveItem.vue";
 import draggable from 'vuedraggable'
+import { useDraggable } from '@/composables/useDraggable'
 
 const cvData = inject('cvData')
 const defaultCvData = inject('defaultCvData')
-const focusTarget = ref(null);
-const isDragging = ref(false)
+const focusTarget = ref(null)
+
+const {
+    isDragging,
+    isEditing,
+    hoverDisabled,
+    handleDragStart,
+    handleDragEnd,
+    handleMouseMove
+} = useDraggable()
 
 const focusNewInput = async (keys) => {
     await nextTick()
-    focusTarget.value = cvData.value.cv[keys].length;
+    focusTarget.value = cvData.value.cv[keys].length
 }
 
 const addContact = (key, value) => {
@@ -37,37 +46,33 @@ const removeContact = (index) => {
         }
     }
 }
-
 </script>
+
 <template>
-    <div class="contact">
+    <div
+        class="contact"
+        :class="{ 'is-dragging': isDragging, 'hover-disabled': hoverDisabled }"
+        @mousemove="handleMouseMove"
+    >
         <div class="sidebar-label">
             CONTACT
         </div>
         <draggable
             v-model="cvData.cv.contact"
             item-key="key"
-            handle=".draggable"
-            animation=150
-            easing="cubic-bezier(0.33, 1, 0.68, 1)"
+            :disabled="isEditing"
+            animation="150"
+            easing="cubic-bezier(0.33, 1, 0.58, 1)"
             tag="ul"
             class="list"
+            ghost-class="ghost"
+            dragClass="sortable-drag"
+            @start="handleDragStart"
+            @end="handleDragEnd"
         >
             <template #item="{ element, index }">
-                <li
-                    class="draggable"
-                    :class="{ 'is-dragging': isDragging }"
-                    @dragstart="isDragging = true"
-                    @dragend="isDragging = false"
-                >
-                    <div class="drag-icon ">
-                        <font-awesome-icon
-                            icon="fa-solid fa-list"
-                            size="sm"
-                        />
-                    </div>
-                    <div class="hoverable item">
-
+                <li class="draggable">
+                    <div :class="['item', { 'hoverable': !isDragging && !hoverDisabled }]">
                         <ItemEditable
                             class="contact-item"
                             :label="element.key"
@@ -75,12 +80,10 @@ const removeContact = (index) => {
                             :must-focus="focusTarget === cvData.cv.contact.length"
                             placeholder="Nouveau contact"
                         />
-
                         <ButtonRemoveItem
                             :show="cvData.cv.contact.length > 1"
                             @click="removeContact(index)"
                         />
-
                     </div>
                 </li>
             </template>
@@ -98,5 +101,10 @@ const removeContact = (index) => {
 <style scoped>
 .item {
     flex: 1;
+}
+
+.is-dragging :deep(.removeItem),
+.hover-disabled :deep(.removeItem) {
+    opacity: 0 !important;
 }
 </style>

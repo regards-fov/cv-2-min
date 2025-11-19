@@ -39,20 +39,38 @@ textarea {
     all: unset;
 }
 
-.hoverable {
-    cursor: text;
-}
-
-.sidebar .hoverable:hover,
-.main .hoverable:hover,
-.ta-desc:hover {
+.hoverable:hover {
     border-radius: var(--border-radius-base);
     background: var(--hover-bg);
     border-color: var(--hover-border);
     box-shadow: var(--hover-shadow);
+    color: var(--greyed-text);
 }
 
-.sidebar .hoverable:hover {
+.hover-disabled .hoverable {
+    pointer-events: none !important;
+}
+
+.sortable-chosen {
+    box-shadow: none;
+}
+
+.sortable-drag {
+    opacity: 0;
+}
+
+.draggable {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.ghost {
+    border-radius: var(--border-radius-base);
+    background: var(--hover-bg);
+    border-color: var(--hover-border);
+    box-shadow: none;
     color: var(--greyed-text);
 }
 
