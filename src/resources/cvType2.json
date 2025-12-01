@@ -73,18 +73,35 @@
                 "period": "2022-2023",
                 "extraInfo": "Start-up Greenly",
                 "description": "Création de contenus, gestion des réseaux sociaux, reporting et suivi des performances."
+            },
+            {
+                "job": "Chargée de communication digitale",
+                "period": "2021-2022",
+                "extraInfo": "Agence NovaCom",
+                "description": "Production de contenus web, optimisation SEO, gestion de newsletters et suivi des indicateurs de performance."
+            },
+            {
+                "job": "Assistante marketing",
+                "period": "2020-2021",
+                "extraInfo": "Boutique EcoMarket",
+                "description": "Animation du site e-commerce, rédaction de fiches produits, analyse des ventes et recommandations d’amélioration."
             }
         ],
         "education": [
             {
-                "school": "DU Marketing Digital — Université de Lyon",
+                "school": "DU Marketing Digital",
                 "period": "2023",
-                "description": ""
+                "description": "Université de Lyon — Spécialisation en marketing digital avancé"
             },
             {
-                "school": "Bootcamp Numérique Oreegami x Google",
-                "period": "2022",
-                "description": ""
+                "school": "Certification Google Analytics",
+                "period": "2021",
+                "description": "Programme en ligne — Maîtrise des outils d'analyse web"
+            },
+            {
+                "school": "Formation SEO & Content Marketing",
+                "period": "2020",
+                "description": "Institut Digital Pro — Techniques avancées de référencement naturel."
             }
         ]
     },

@@ -135,7 +135,7 @@ const containerClass = computed(() => ({
                 >Réinitialiser les données</span>
             </button>
 
-            <div v-show="!isLocalhost">
+            <div v-show="isLocalhost">
                 <button @click="downloadJson">
                     <img
                         :src="iconDownload"
@@ -340,6 +340,7 @@ const containerClass = computed(() => ({
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
 }
 
 .left-container button::before {
@@ -364,6 +365,11 @@ const containerClass = computed(() => ({
 
 .left-container button:active {
     transform: scale(0.96) translateX(4px);
+}
+
+button.active {
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
 
 .data-actions button:hover {

@@ -199,10 +199,6 @@ watch(() => props.initialColor, (newColor) => {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.card:hover {
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
 .wrapper {
     display: flex;
     flex-direction: column;
