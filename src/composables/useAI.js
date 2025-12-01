@@ -25,10 +25,10 @@ export function useAI() {
                 throw new Error(data.message || data.error || 'Erreur serveur');
             }
 
-            console.log(data);
             return data.enhanced;
 
         } catch (err) {
+            console.log(err);
             error.value = err.message;
             throw err;
         } finally {

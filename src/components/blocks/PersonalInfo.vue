@@ -24,7 +24,7 @@ const cvData = defineModel({ type: Object, required: true })
                 v-font-size-editor="{ cvData, name: 'lookupJob', maxSize: 18 }"
                 v-model="cvData.cv.personal[1].value"
                 name="lookupJob"
-                placeholder="Emploi"
+                placeholder="Poste"
             />
         </div>
     </div>

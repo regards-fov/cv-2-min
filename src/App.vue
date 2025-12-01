@@ -1,7 +1,7 @@
 <script setup>
 import { ref, provide, onMounted, watch } from 'vue'
 import { useCvState } from "./composables/useCvState";
-import LeftContainer from "./components/layout/PropertiesPanel.vue"
+import PropertiesPanel from "./components/layout/PropertiesPanel.vue"
 import MainSection from "./components/layout/MainSection.vue";
 import Sidebar from "./components/layout/SideBar.vue";
 
@@ -13,8 +13,15 @@ provide('defaultCvData', defaultCvData);
 const isLocalhost = window.location.hostname === 'localhost'
 
 const isColorWheelOpen = ref(false);
+const isPanelCollapsed = ref(true);
 
-const toggleColorWheel = () => { isColorWheelOpen.value = !isColorWheelOpen.value; };
+const toggleColorWheel = () => {
+  isColorWheelOpen.value = !isColorWheelOpen.value;
+
+  if (isColorWheelOpen.value && isPanelCollapsed.value) {
+    isPanelCollapsed.value = false;
+  }
+};
 
 watch(() => cvData.value.layout?.mainColor, (newColor) => {
   if (newColor) {
@@ -72,25 +79,53 @@ const handleMouseUp = () => {
 </script>
 
 <template>
-  <LeftContainer :isColorWheelOpen="isColorWheelOpen" :currentColor="cvData.layout.mainColor"
-    @toggle-color-wheel="toggleColorWheel" @change-color="handleChangeColor" />
+  <PropertiesPanel
+    :isColorWheelOpen="isColorWheelOpen"
+    :currentColor="cvData.layout.mainColor"
+    :collapsed="isPanelCollapsed"
+    @toggle-color-wheel="toggleColorWheel"
+    @change-color="handleChangeColor"
+    @update:collapsed="isPanelCollapsed = $event"
+  />
 
-  <div class="drag-area" @mousedown="handleMouseDown" @mousemove="handleMouseMove" @mouseup="handleMouseUp">
+  <div
+    class="drag-area"
+    @mousedown="handleMouseDown"
+    @mousemove="handleMouseMove"
+    @mouseup="handleMouseUp"
+  >
 
-    <div id="a4-container" :style="{
-      position: 'absolute',
-      left: position.x + 'px',
-      top: position.y + 'px',
-      pointerEvents: 'none'
-    }">
-      <Sidebar :cvData="cvData" @update:cvData="cvData = $event" @toggleColorWheel="toggleColorWheel" />
+    <div
+      id="a4-container"
+      :style="{
+        position: 'absolute',
+        left: position.x + 'px',
+        top: position.y + 'px',
+        pointerEvents: 'none'
+      }"
+    >
+      <div class="top-layout"></div>
 
-      <MainSection :cvData="cvData" @update:cvData="cvData = $event" />
+      <div class="container classic-layout">
+        <Sidebar
+          :cvData="cvData"
+          @update:cvData="cvData = $event"
+          @toggleColorWheel="toggleColorWheel"
+        />
+
+        <MainSection
+          :cvData="cvData"
+          @update:cvData="cvData = $event"
+        />
+      </div>
+
     </div>
   </div>
-  <div class="disclaimer" v-show="!isLocalhost">Ce site est en cours de développement. Il est fonctionnel, mais
-    certaines anomalies ou
-    dysfonctionnements peuvent survenir.</div>
+  <div
+    class="disclaimer"
+    v-show="!isLocalhost"
+  >Ce que vous voyez ici est une démo fonctionnelle, gardez à l'esprit
+    que certains dysfonctionnements peuvent survenir !</div>
 </template>
 
 <style scoped lang="scss">
@@ -105,8 +140,9 @@ const handleMouseUp = () => {
 }
 
 .disclaimer {
-  background-color: beige;
-  font-style: italic;
+  background-color: rgb(153, 42, 110);
+  color: #f5f5f5;
+  font-weight: 600;
   position: fixed;
   left: 0;
   right: 0;
@@ -114,7 +150,8 @@ const handleMouseUp = () => {
   text-align: center;
   margin: 0 auto;
   padding: 12px;
-  font-size: 8pt;
+  font-size: 10pt;
+  z-index: 9999;
 }
 
 .sidebar,
@@ -126,13 +163,17 @@ const handleMouseUp = () => {
 
 #a4-container {
   background-color: whitesmoke;
-  display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr;
   width: 210mm;
   height: 297mm;
   padding: 0 12px 10px 12px;
   box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
   box-sizing: border-box;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  height: 100%;
 }
 
 :deep(textarea) {

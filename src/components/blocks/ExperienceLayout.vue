@@ -35,7 +35,7 @@ const handleExtra = () => {
 const config = {
     jobs: {
         mainField: 'job',
-        placeholder: 'Emploi',
+        placeholder: 'Poste',
         hasExtraInfo: true
     },
     education: {

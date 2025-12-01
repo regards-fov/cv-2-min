@@ -46,16 +46,18 @@ const handleClick = (e) => {
     }"
     @sidebar-resized="handleSidebarResize"
   >
+    <div class="personnal-container">
 
-    <div
-      class="topbox box-color"
-      v-color-wheel="colorWheel"
-      @click="handleClick"
-    ></div>
+      <div
+        class="topbox box-color"
+        v-color-wheel="colorWheel"
+        @click="handleClick"
+      ></div>
 
-    <PersonalInfo v-model="$userData" />
+      <PersonalInfo v-model="$userData" />
 
-    <PictureUploader v-model="$userData.cv.picture" />
+      <PictureUploader v-model="$userData.cv.picture" />
+    </div>
 
     <div
       class="infos box-color"
@@ -84,6 +86,11 @@ const handleClick = (e) => {
 
 </template>
 <style lang="scss" scoped>
+.personnal-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .topbox {
   min-height: 20px;
   border-bottom-left-radius: 6px;

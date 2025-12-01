@@ -205,8 +205,8 @@ li {
 
     .removeItem {
         position: absolute;
-        margin-top: -15px;
-        right: -13px;
+        margin-top: -13px;
+        right: -10px;
     }
 
     & .header:hover {

@@ -5,6 +5,7 @@ import { useAI } from '@/composables/useAI'
 
 const cvData = inject('cvData')
 
+const hovering = ref(false)
 const suggestion = ref(null)
 const { isLoading, error, enhanceText } = useAI()
 
@@ -16,12 +17,12 @@ async function enhance() {
     try {
         const response = await enhanceText(
             cvData.value.cv.resume,
-            'un resume parcours et expérience professionelle façon micro-bio',
+            'Un résumé du parcours et des expériences professionelles de l\'utilisateur façon micro-bio',
             jobPosition || '',
-            "professional"
+            "professionel"
         )
 
-        suggestion.value = response.version1
+        suggestion.value = response.resume
     } catch (err) {
         console.error('Enhancement failed:', err)
     }
@@ -34,15 +35,20 @@ function applySuggestion() {
 </script>
 
 <template>
-    <section class="resume-section">
+    <section
+        class="resume-section"
+        :class="{ 'highlight-resume': hovering }"
+    >
         <TextareaSection
             v-model="cvData.cv.resume"
             name="resume"
             placeholder="Votre profil et motivations en quelques lignes"
         />
         <button
+            @mouseover="hovering = true"
+            @mouseleave="hovering = false"
             @click="enhance"
-            :disabled="isLoading || suggestion || !cvData.cv.resume"
+            :disabled="true || isLoading || suggestion || !cvData.cv.resume"
             class="ai-button"
         >
             <span v-if="!isLoading">✨ Améliorer avec IA</span>
@@ -83,13 +89,13 @@ function applySuggestion() {
 .resume-section {
     position: relative;
     margin-top: 17px;
-    padding-top: 0px;
     margin-bottom: 7px;
 }
 
 #resume {
     position: relative;
     z-index: 1;
+    background-color: #f5f5f5;
 
     &>* {
         text-align: justify;
@@ -102,28 +108,33 @@ button {
 
 .ai-button {
     position: absolute;
-    top: 12px;
+    top: 18px;
     right: 0;
-    padding: 8px 16px;
+    padding: 4px 16px 8px 16px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
-    transition: transform 0.2s, opacity 0.2s;
+    transition: transform 0.2s, opacity 0.1s;
     opacity: 0;
     pointer-events: none;
+    box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
+}
+
+.resume-section:hover .ai-button {
+    opacity: 0.8;
+    pointer-events: auto;
     transform: translateY(-45px);
+}
+
+.resume-section:hover .ai-button:hover {
+    opacity: 1;
 }
 
 .ai-button:disabled {
     cursor: not-allowed;
-}
-
-.resume-section:hover .ai-button {
-    opacity: 1;
-    pointer-events: auto;
 }
 
 .resume-section:hover .ai-button:disabled {
@@ -200,5 +211,13 @@ button {
     color: var(--button-negative);
     font-size: 13px;
     margin-top: 8px;
+}
+
+.highlight-resume #resume {
+    border-radius: 5px 0px 5px 5px;
+    background: var(--hover-bg);
+    border-color: var(--hover-border);
+    box-shadow: 0 1px 4px rgba(102, 126, 234, 0.6);
+    color: var(--greyed-text);
 }
 </style>
