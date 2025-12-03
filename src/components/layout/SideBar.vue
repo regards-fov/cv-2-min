@@ -96,7 +96,7 @@ const handleClick = (e) => {
 }
 
 .topbox {
-  min-height: 20px;
+  min-height: 16px;
   border-bottom-left-radius: var(--sidebar-radius);
   border-bottom-right-radius: var(--sidebar-radius);
 }
@@ -147,7 +147,6 @@ const handleClick = (e) => {
 }
 
 .hobbies {
-  text-align: left;
   padding: 15px 13px;
 
   .sidebar-label {

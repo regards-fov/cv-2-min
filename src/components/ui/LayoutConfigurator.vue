@@ -15,7 +15,7 @@ const setAlignement = (alignementConf) => {
 <template>
     <div class="layout-selector">
         <div>
-            <div class="label">Position</div>
+            <div class="label">Présentation</div>
             <div class="selectors">
                 <button
                     @click="setLayout('open')"

@@ -17,8 +17,7 @@ const hueEl = ref(null)
 
 const sample = {
     vives: ['#f59e0b', '#eab308', '#84cc16', '#22c55e', '#10b981', '#14b8a6', '#62b1c9', '#3b82f6', '#6366f1', '#8b5cf6', '#ec4899', '#f43f5e'],
-    pastels: ['#E3CBE2', '#E7BDBD', '#F6CFAF', '#F3E8B6', '#D2E5C3', '#B8D5E6'],
-    neutres: ['#F5F5F4', '#9CA3AF']
+    pastels: ['#E3CBE2', '#E7BDBD', '#F6CFAF', '#F3E8B6', '#D2E5C3', '#B8D5E6', '#F5F5F5', '#9CA3AF']
 }
 
 function clamp(v, a, b) { return Math.max(a, Math.min(b, v)) }
@@ -112,7 +111,6 @@ watch(() => props.initialColor, (newColor) => {
 
 
 <template>
-
     <div class="card">
         <div class="wrapper">
             <div class="palette-select">
@@ -186,6 +184,7 @@ watch(() => props.initialColor, (newColor) => {
                     </div>
                 </template>
             </div>
+            <div class="label">Arrondi</div>
         </div>
     </div>
 </template>
@@ -194,7 +193,7 @@ watch(() => props.initialColor, (newColor) => {
 .card {
     border-bottom-left-radius: 14px;
     border-bottom-right-radius: 14px;
-    padding: 20px;
+    padding: 21px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -202,7 +201,14 @@ watch(() => props.initialColor, (newColor) => {
 .wrapper {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
+}
+
+.label {
+    font-size: 12pt;
+    letter-spacing: 0.8px;
+    color: #3b3b3b;
+    font-weight: 600;
 }
 
 .palette-select {
@@ -278,7 +284,7 @@ watch(() => props.initialColor, (newColor) => {
 }
 
 input[type="text"] {
-    padding: 10px 14px;
+    padding: 6px 8px;
     border-radius: 10px;
     border: 2px solid #e2e8f0;
     font-family: 'Monaco', 'Menlo', monospace;
@@ -302,12 +308,8 @@ input[type="text"]:focus {
     box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
-.palette {
-    margin-top: 8px;
-}
-
 .palette h3 {
-    margin: 20px 0 12px 0;
+    margin: 10px 0 12px 0;
     font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
@@ -322,7 +324,7 @@ input[type="text"]:focus {
 .swatches {
     display: flex;
     flex-wrap: wrap;
-    gap: 7px;
+    gap: 6px;
 }
 
 .sw {

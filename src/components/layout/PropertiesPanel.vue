@@ -161,7 +161,7 @@ const containerClass = computed(() => ({
                 <button
                     @click="handleColorPickerClick"
                     :class="{ active: isColorWheelOpen }"
-                    v-tooltip:right="{ text: 'Modifier la couleur principale', show: collapsed }"
+                    v-tooltip:right="{ text: 'Modifier la barre latérale', show: collapsed }"
                 >
                     <img
                         :src="iconColor"
@@ -170,7 +170,7 @@ const containerClass = computed(() => ({
                     <span
                         class="label "
                         v-show="showContent"
-                    >Couleur principale</span>
+                    >Couleur</span>
                     <span
                         class="chevron "
                         :class="{ open: isColorWheelOpen }"
@@ -334,6 +334,7 @@ const containerClass = computed(() => ({
     display: flex;
     position: relative;
     width: 100%;
+    font-family: Inter, Roboto, -apple-system, "San Francisco", "Segoe UI", "Helvetica Neue", sans-serif;
     justify-content: flex-start;
     align-items: center;
     gap: 12px;
