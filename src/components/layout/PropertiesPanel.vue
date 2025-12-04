@@ -1,10 +1,10 @@
 <script setup>
 import { ref, computed, watch } from "vue";
-import PropertiesPanelButton from '../PropertiesPanel/PropertiesPanelButton.vue';
-import PropertiesPanelActions from '../PropertiesPanel/PropertiesPanelActions.vue';
-import PropertiesPanelDesign from '../PropertiesPanel/PropertiesPanelDesign.vue';
-import PropertiesPanelLayout from '../PropertiesPanel/PropertiesPanelLayout.vue';
-import PropertiesPanelTemplate from "../PropertiesPanel/PropertiesPanelTemplate.vue";
+import PropertiesPanelButton from '../propertiesPanel/PropertiesPanelButton.vue';
+import PropertiesPanelActions from '../propertiesPanel/PropertiesPanelActions.vue';
+import PropertiesPanelDesign from '../propertiesPanel/PropertiesPanelDesign.vue';
+import PropertiesPanelLayout from '../propertiesPanel/PropertiesPanelLayout.vue';
+import PropertiesPanelTemplate from "../propertiesPanel/PropertiesPanelTemplate.vue";
 import iconCollapse from '@icons/collapse.svg';
 
 const props = defineProps({
