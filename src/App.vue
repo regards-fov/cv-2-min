@@ -278,7 +278,7 @@ const handleMouseUp = () => {
     overflow: hidden !important;
   }
 
-  .left-container,
+  .properties-panel,
   .disclaimer,
   button {
     display: none !important;
