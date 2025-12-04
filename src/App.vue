@@ -7,25 +7,19 @@ import MainSection from "./components/layout/MainSection.vue";
 import Sidebar from "./components/layout/SideBar.vue";
 import { vZoom } from './directives/zoomable';
 
-
 const { cvData, defaultCvData } = useCvState();
 
 provide('cvData', cvData);
 provide('defaultCvData', defaultCvData);
 
 const isLocalhost = window.location.hostname === 'localhost'
-
 const isColorWheelOpen = ref(false);
-
 const isPanelCollapsed = ref(true);
-
 const zoomable = ref(null);
-
 const zoom = ref(100);
 
 const toggleColorWheel = () => {
   isColorWheelOpen.value = !isColorWheelOpen.value;
-
   if (isColorWheelOpen.value && isPanelCollapsed.value) {
     isPanelCollapsed.value = false;
   }
@@ -70,11 +64,8 @@ onMounted(() => {
       zoom.value = Math.round(z * 100);
     });
   }
-
   centerContainer();
-
 });
-
 
 const handleMouseDown = (e) => {
   if (e.target.classList.contains('drag-area')) {
@@ -98,7 +89,6 @@ const handleMouseMove = (e) => {
 const handleMouseUp = () => {
   isDragging.value = false;
 };
-
 </script>
 
 <template>
@@ -106,8 +96,8 @@ const handleMouseUp = () => {
     :isColorWheelOpen="isColorWheelOpen"
     :currentColor="cvData.configuration.sidebar.color"
     :collapsed="isPanelCollapsed"
-    @toggle-color-wheel="toggleColorWheel"
-    @change-color="handleChangeColor"
+    @toggleColorWheel="toggleColorWheel"
+    @changeColor="handleChangeColor"
     @update:collapsed="isPanelCollapsed = $event"
   />
 
@@ -150,9 +140,9 @@ const handleMouseUp = () => {
           @update:cvData="cvData = $event"
         />
       </div>
-
     </div>
   </div>
+
   <div
     class="disclaimer"
     v-show="!isLocalhost"

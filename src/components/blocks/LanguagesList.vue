@@ -59,7 +59,6 @@ const removeItem = (index) => {
                     <select
                         name="language-name"
                         :id="`language-select-${index}`"
-                        class="language-select"
                         v-model="cvData.cv.spokenLanguages[index].value"
                     >
                         <option value="">--</option>
@@ -72,7 +71,6 @@ const removeItem = (index) => {
                         </option>
                     </select>
                 </label>
-
                 <label :for="`level-select-${index}`">
                     <select
                         name="language-level"
@@ -80,9 +78,9 @@ const removeItem = (index) => {
                         v-model="cvData.cv.spokenLanguages[index].level"
                     >
                         <option value="--">--</option>
-                        <option value="A1">A1</option>
-                        <option value="A2">A2</option>
-                        <option value="B1">B1</option>
+                        <option value="A1">Débutant</option>
+                        <option value="A2">Avancé</option>
+                        <option value="B1">Intermédiaire</option>
                         <option value="B2">B2</option>
                         <option value="C1">C1</option>
                         <option value="C2">C2</option>
@@ -104,15 +102,8 @@ const removeItem = (index) => {
 <style scoped>
 ul li {
     display: flex;
-    flex: 1 1 auto;
     justify-content: space-between;
-    padding-top: 1px;
-}
-
-.language-select {
-    text-align: left;
-
-    width: 98%;
+    gap: 12px;
 }
 
 select {

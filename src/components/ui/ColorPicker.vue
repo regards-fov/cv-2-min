@@ -109,7 +109,6 @@ watch(() => props.initialColor, (newColor) => {
 
 </script>
 
-
 <template>
     <div class="card">
         <div class="wrapper">

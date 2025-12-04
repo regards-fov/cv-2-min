@@ -24,6 +24,10 @@ body *:focus:not(button) {
     color: #000;
 }
 
+.item {
+    text-align: inherit;
+}
+
 #sidebar .item {
     text-align: left;
 }

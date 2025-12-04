@@ -1,6 +1,19 @@
-.template-air #sidebar .item {
+.template-air #sidebar {
     text-align: right;
+}
+
+.template-air .restyle-input {
+    text-align: inherit;
+}
+
+.template-air #sidebar .item {
     color: #000;
+    text-align: inherit;
+}
+
+.template-air #sidebar .hoverable:hover {
+    color: var(--greyed-text);
+    text-align: inherit;
 }
 
 .template-air .sidebar-label {
@@ -57,6 +70,7 @@
 
 .template-air #main-section {
     background-color: #fff;
+    border-radius: 2px;
 }
 
 .template-air #a4-container.template-air {

@@ -34,6 +34,7 @@ const isEmpty = computed(() => !modelValue.value)
 const itemClasses = computed(() => [
     'extra-padding',
     'item',
+    'hoverable',
     { 'greyed-out': isEmpty.value }
 ])
 
@@ -149,7 +150,8 @@ watch(modelValue, () => {
     margin: 0;
     font-family: inherit;
     color: inherit;
-    line-height: normal;
+    text-align: inherit;
+    line-height: inherit;
     appearance: none;
     outline: none;
     resize: none;
