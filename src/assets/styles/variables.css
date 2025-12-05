@@ -17,4 +17,7 @@
   --sidebar-radius: 6px;
   --text-align: justify;
   --sidebar-text-align: end;
+  --conf-layout-color: linear-gradient(90deg, #c53c80 0%, #db6b9d 100%);
+  --conf-template-color: linear-gradient(90deg, #059669 0%, #1cc48c 100%);
+  --conf-x-color: linear-gradient(90deg, #3c87c5 0%, #6b6ddb 100%);
 }

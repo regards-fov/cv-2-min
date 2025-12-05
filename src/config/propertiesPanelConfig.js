@@ -3,6 +3,7 @@ import iconReset from '@icons/reset.svg';
 import iconDownload from '@icons/download.svg';
 import iconColor from '@icons/color.svg';
 import iconLayout from '@icons/layout.svg';
+import iconTemplate from '@icons/template.svg';
 
 export const propertiesPanelSections = [
     {
@@ -57,7 +58,7 @@ export const propertiesPanelSections = [
             id: 'layoutSelector',
             icon: iconLayout,
             label: 'Textes',
-            tooltip: 'Modifier le format',
+            tooltip: 'Modifier le format texte',
             component: 'LayoutConfigurator'
         }
     },
@@ -66,6 +67,13 @@ export const propertiesPanelSections = [
         title: 'TEMPLATE',
         color: '#059669',
         separatorClass: 'template-separator',
-        templates: ['Classique', 'Moderne']
+        expandable: {
+            id: 'templateSelector',
+            icon: iconTemplate,
+            label: 'Choix du template',
+            tooltip: 'Choix du template',
+            component: 'TemplateSelector',
+        },
+        templates: ['classic', 'air'],
     }
 ];

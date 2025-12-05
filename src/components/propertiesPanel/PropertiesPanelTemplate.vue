@@ -1,19 +1,35 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
+import PropertiesPanelButton from './PropertiesPanelButton.vue';
 import { propertiesPanelSections } from '../../config/propertiesPanelConfig';
+import chevronDown from '@icons/chevron.svg';
+
+const cvData = inject('cvData')
+
+const isTemplateSelectorOpen = defineModel('isTemplateSelectorOpen', { type: Boolean, required: true })
 
 const props = defineProps({
     collapsed: { type: Boolean, required: true },
     showContent: { type: Boolean, required: true }
 });
 
+const emit = defineEmits(['click:templateSelector']);
+
+const setLayout = (layoutConf) => {
+    cvData.value.configuration.mainSection.layout = layoutConf
+}
+
 const templateSection = computed(() =>
     propertiesPanelSections.find(section => section.id === 'template')
 );
 
-const selectTemplate = (template) => {
-    console.log('Template sélectionné:', template);
+const handleTemplateSelectorClick = () => {
+    emit('click:templateSelector');
 };
+
+const selectTemplate = (template) => {
+    cvData.value.configuration.template = template
+}
 </script>
 
 <template>
@@ -31,15 +47,50 @@ const selectTemplate = (template) => {
             :class="templateSection.separatorClass"
         ></div>
 
-        <div class="template-buttons">
-            <button
-                v-for="template in templateSection.templates"
-                :key="template"
-                class="template-btn"
-                @click="selectTemplate(template)"
+        <div class="expandable-wrapper">
+            <PropertiesPanelButton
+                :icon="templateSection.expandable.icon"
+                :label="templateSection.expandable.label"
+                :tooltip="templateSection.expandable.tooltip"
+                :collapsed="collapsed"
+                :show-content="showContent"
+                :class="{ active: isTemplateSelectorOpen }"
+                @click="handleTemplateSelectorClick"
             >
-                {{ template }}
-            </button>
+                <template #suffix>
+                    <span
+                        class="chevron"
+                        :class="{ open: isTemplateSelectorOpen }"
+                        v-show="showContent"
+                    >
+                        <img
+                            :src="chevronDown"
+                            class="icon"
+                        />
+                    </span>
+                </template>
+            </PropertiesPanelButton>
+            <Transition name="accordion">
+                <div
+                    v-if="isTemplateSelectorOpen && showContent"
+                    class="expandable-content"
+                >
+
+
+                    <div class="template-selector">
+                        <button
+                            v-for="template in templateSection.templates"
+                            :key="template"
+                            :class="['template-btn', { active: cvData.configuration.template === template }]"
+                            @click="selectTemplate(template)"
+                        >
+                            {{ template }}
+                        </button>
+                    </div>
+
+
+                </div>
+            </Transition>
         </div>
     </div>
 </template>
@@ -66,61 +117,90 @@ const selectTemplate = (template) => {
 }
 
 .template-separator {
-    background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+    background: var(--conf-template-color);
     box-shadow: 0 1px 3px rgba(5, 150, 105, 0.3);
 }
 
-.template-buttons {
+.expandable-content {
+    border-radius: 0 0 6px 6px;
+    background: white;
+}
+
+.chevron {
+    margin-left: auto;
+    width: 18px;
+    height: 18px;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chevron img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.chevron.open {
+    transform: rotate(180deg);
+}
+
+.template-selector {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    padding: 12px 16px;
 }
 
-.template-btn {
-    display: flex;
-    position: relative;
-    width: 100%;
-    font-family: Inter, Roboto, -apple-system, "San Francisco", "Segoe UI", "Helvetica Neue", sans-serif;
-    justify-content: center;
-    align-items: center;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 12px;
-    background: #ffffff;
-    color: #1e293b;
-    font-size: 14px;
-    font-weight: 600;
-    text-align: center;
-    letter-spacing: 0.4px;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+.accordion-enter-active,
+.accordion-leave-active {
+    transition: all 0.3s ease-in-out;
     overflow: hidden;
 }
 
-.template-btn::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 100%;
-    background: linear-gradient(90deg, #059669 0%, #10b981 100%);
-    transition: width 0.3s ease;
-    z-index: 0;
+.accordion-enter-from,
+.accordion-leave-to {
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
 }
 
-.template-btn:hover {
-    transform: translateX(1px);
+.accordion-enter-to,
+.accordion-leave-from {
+    max-height: 720px;
+    opacity: 1;
+}
+
+.template-btn {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #1e293b;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    color: white;
-}
+    transform: translateY(0);
 
-.template-btn:hover::before {
-    width: 100%;
-}
+    &:hover {
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.12);
+        background: #e2e8f0;
+    }
 
-.template-btn:active {
-    transform: scale(0.96) translateX(4px);
+    &:active {
+        transform: translateY(2px);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    &.active {
+        background: var(--conf-template-color);
+        color: white;
+        box-shadow: 0 1px 2px rgba(99, 102, 241, 0.2);
+        transform: translateY(2px);
+    }
 }
 </style>

@@ -7,7 +7,7 @@ const props = defineProps({
     tooltip: { type: String, default: '' },
     collapsed: { type: Boolean, default: false },
     showContent: { type: Boolean, default: true },
-    variant: { type: String, default: 'default' } // 'default' | 'collapse'
+    variant: { type: String, default: 'default' }
 });
 
 const emit = defineEmits(['click']);
@@ -46,7 +46,7 @@ const handleClick = (event) => {
     justify-content: flex-start;
     align-items: center;
     gap: 12px;
-    padding: 8px 12px;
+    padding: 8px 10px;
     border: none;
     border-radius: 12px;
     background: #ffffff;

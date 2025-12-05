@@ -1,7 +1,7 @@
 <script setup>
-import { ref, computed } from 'vue';
-import ButtonRemoveItem from "../ui/ButtonRemoveItem.vue";
-import CropModal from "./CropModal.vue";
+import { ref, computed } from 'vue'
+import ButtonRemoveItem from "../ui/ButtonRemoveItem.vue"
+import CropModal from "./CropModal.vue"
 import uploadIcon from '@icons/upload.svg'
 import { getDefaultPicture } from '../../utils/defaultImage'
 import {

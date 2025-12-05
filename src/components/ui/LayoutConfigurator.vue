@@ -14,39 +14,35 @@ const setAlignement = (alignementConf) => {
 
 <template>
     <div class="layout-selector">
-        <div>
-            <div class="label">Présentation</div>
-            <div class="selectors">
-                <button
-                    @click="setLayout('open')"
-                    :class="{ active: cvData.configuration.mainSection.layout === 'open' }"
-                >
-                    Aérée
-                </button>
-                <button
-                    @click="setLayout('close')"
-                    :class="{ active: cvData.configuration.mainSection.layout === 'close' }"
-                >
-                    Condensée
-                </button>
-            </div>
+        <div class="label">Présentation</div>
+        <div class="selectors">
+            <button
+                @click="setLayout('open')"
+                :class="{ active: cvData.configuration.mainSection.layout === 'open' }"
+            >
+                Aérée
+            </button>
+            <button
+                @click="setLayout('close')"
+                :class="{ active: cvData.configuration.mainSection.layout === 'close' }"
+            >
+                Condensée
+            </button>
         </div>
-        <div>
-            <div class="label">Alignement</div>
-            <div class="selectors">
-                <button
-                    @click="setAlignement('justify')"
-                    :class="{ active: cvData.configuration.mainSection.textAlign === 'justify' }"
-                >
-                    Justifié
-                </button>
-                <button
-                    @click="setAlignement('normal')"
-                    :class="{ active: cvData.configuration.mainSection.textAlign === 'normal' }"
-                >
-                    Classique
-                </button>
-            </div>
+        <div class="label">Alignement</div>
+        <div class="selectors">
+            <button
+                @click="setAlignement('justify')"
+                :class="{ active: cvData.configuration.mainSection.textAlign === 'justify' }"
+            >
+                Justifié
+            </button>
+            <button
+                @click="setAlignement('normal')"
+                :class="{ active: cvData.configuration.mainSection.textAlign === 'normal' }"
+            >
+                Classique
+            </button>
         </div>
     </div>
 </template>
@@ -55,11 +51,11 @@ const setAlignement = (alignementConf) => {
 .layout-selector {
     display: flex;
     flex-direction: column;
-    padding: 10px 16px 22px 16px;
-    gap: 16px;
+    padding: 0 16px 12px 16px;
 }
 
 .label {
+    margin-top: 10px;
     margin-bottom: 6px;
     font-size: 11pt;
     letter-spacing: 0.8px;
@@ -98,7 +94,7 @@ const setAlignement = (alignementConf) => {
     }
 
     &.active {
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        background: var(--conf-layout-color);
         color: white;
         box-shadow: 0 1px 2px rgba(99, 102, 241, 0.2);
         transform: translateY(2px);

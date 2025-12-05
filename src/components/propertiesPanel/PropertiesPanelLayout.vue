@@ -3,16 +3,16 @@ import { computed } from 'vue';
 import PropertiesPanelButton from './PropertiesPanelButton.vue';
 import LayoutConfigurator from '../ui/LayoutConfigurator.vue';
 import { propertiesPanelSections } from '../../config/propertiesPanelConfig';
-
 import chevronDown from '@icons/chevron.svg';
+
+const isLayoutSelectorOpen = defineModel('isLayoutSelectorOpen', { type: Boolean, required: true })
 
 const props = defineProps({
     collapsed: { type: Boolean, required: true },
-    showContent: { type: Boolean, required: true },
-    isLayoutSelectorOpen: { type: Boolean, required: true }
+    showContent: { type: Boolean, required: true }
 });
 
-const emit = defineEmits(['update:isLayoutSelectorOpen', 'click:layoutSelector']);
+const emit = defineEmits(['click:layoutSelector']);
 
 const layoutSection = computed(() =>
     propertiesPanelSections.find(section => section.id === 'layout')
@@ -96,7 +96,7 @@ const handleLayoutSelectorClick = () => {
 }
 
 .layout-separator {
-    background: linear-gradient(90deg, #c53c80 0%, #db6b9d 100%);
+    background: var(--conf-layout-color);
     box-shadow: 0 1px 3px rgba(197, 60, 128, 0.3);
 }
 

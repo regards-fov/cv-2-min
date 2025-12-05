@@ -143,7 +143,7 @@
         ]
     },
     "configuration": {
-        "template": "template-air",
+        "template": "air",
         "sidebar": {
             "size": 240,
             "color": "#62b1c9"

@@ -17,6 +17,7 @@ const emit = defineEmits(['toggleColorWheel', 'changeColor', 'update:collapsed']
 
 const showContent = ref(!props.collapsed);
 const isLayoutSelectorOpen = ref(false);
+const isTemplateSelectorOpen = ref(false);
 
 const toggleCollapse = () => {
     emit('update:collapsed', !props.collapsed);
@@ -42,6 +43,17 @@ const handleLayoutSelectorClick = () => {
         }
     } else {
         isLayoutSelectorOpen.value = !isLayoutSelectorOpen.value;
+    }
+};
+
+const handleTemplateSelectorClick = () => {
+    if (props.collapsed) {
+        emit('update:collapsed', false);
+        if (!isTemplateSelectorOpen.value) {
+            isTemplateSelectorOpen.value = true;
+        }
+    } else {
+        isTemplateSelectorOpen.value = !isTemplateSelectorOpen.value;
     }
 };
 
@@ -100,8 +112,10 @@ const containerClass = computed(() => ({
         />
 
         <PropertiesPanelTemplate
+            v-model:isTemplateSelectorOpen="isTemplateSelectorOpen"
             :collapsed="collapsed"
             :show-content="showContent"
+            @click:template-selector="handleTemplateSelectorClick"
         />
     </div>
 </template>
@@ -119,7 +133,7 @@ const containerClass = computed(() => ({
     gap: 9px;
     padding: 16px 16px;
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    height: 100%;
+    // height: 100%;
     box-shadow: 0 2px 4px rgba(96, 135, 208, 0.3);
     transition: width 0.25s ease;
     overflow: hidden;

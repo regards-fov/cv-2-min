@@ -1,22 +1,23 @@
-.template-air #sidebar {
+.air #sidebar {
+    background-color: #f8f8f8;
     text-align: right;
 }
 
-.template-air .restyle-input {
+.air .restyle-input {
     text-align: inherit;
 }
 
-.template-air #sidebar .item {
+.air #sidebar .item {
     color: #000;
     text-align: inherit;
 }
 
-.template-air #sidebar .hoverable:hover {
+.air #sidebar .hoverable:hover {
     color: var(--greyed-text);
     text-align: inherit;
 }
 
-.template-air .sidebar-label {
+.air .sidebar-label {
     color: #fff;
     background-color: var(--main-color);
     padding: 2px 5px 2px 15px;
@@ -24,55 +25,56 @@
     justify-self: end;
 }
 
-.template-air .block:nth-of-type(1) {
+.air .block:nth-of-type(1) {
     margin: 6px 12px 4px 12px;
 }
 
-.template-air .sidebar .picture-container {
+.air .sidebar .picture-container {
     max-width: 80%;
     align-self: end;
     margin-right: 12px;
 }
 
-.template-air .topbox {
+.air .topbox {
     height: 12px;
 }
 
-.template-air .languages li {
+.air .languages li {
     justify-content: end;
 }
 
-.template-air .resume-section {
+.air .resume-section {
     margin-top: 13px;
 }
 
-.template-air .personal {
+.air .personal {
     margin-right: 14px;
     border-right: 8px solid var(--main-color);
 }
 
-.template-air .main-label {
+.air .main-label {
     border-bottom: 2px solid var(--main-color);
     background: white;
 }
 
-.template-air .box-color {
+.air .box-color {
     background-color: transparent;
 }
 
-.template-air .topbox {
+.air .topbox {
     opacity: 0;
 }
 
-.template-air .hobbies .sidebar-label {
+.air .hobbies .sidebar-label {
     padding: 2px 5px 2px 11px;
 }
 
-.template-air #main-section {
-    background-color: #fff;
+.air #main-section {
+    // background-color: #fff;
     border-radius: 2px;
 }
 
-.template-air #a4-container.template-air {
-    padding: 0px 0px;
+#a4-container.air {
+    background-color: white;
+    // padding: 0px 0px;
 }

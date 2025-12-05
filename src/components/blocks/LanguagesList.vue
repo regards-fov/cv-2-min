@@ -79,11 +79,8 @@ const removeItem = (index) => {
                     >
                         <option value="--">--</option>
                         <option value="A1">Débutant</option>
-                        <option value="A2">Avancé</option>
-                        <option value="B1">Intermédiaire</option>
-                        <option value="B2">B2</option>
-                        <option value="C1">C1</option>
-                        <option value="C2">C2</option>
+                        <option value="B2">Intermédiaire</option>
+                        <option value="C1">Avancé</option>
                     </select>
                 </label>
 
