@@ -2,12 +2,10 @@ import { ref, computed, watch } from 'vue'
 import { useLocalStorage } from "./useLocalStorage";
 import cvType1 from "../resources/cvType1.json";
 import cvType2 from "../resources/cvType2.json";
-import cvType3 from "../resources/cvType3.json";
 
 const cvModels = {
     'cvType1': cvType1,
-    'cvType2': cvType2,
-    'cvType3': cvType3
+    'cvType2': cvType2
 };
 
 const currentModel = ref('cvType1');

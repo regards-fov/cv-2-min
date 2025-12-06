@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import router from './router.js'
 import App from './App.vue'
 import '@styles/variables.css'
 import '@styles/template-air.scss'
@@ -14,6 +15,8 @@ const app = createApp(App)
 const gtag = createGtag({
   tagId:  "G-5F1ZH0FHK5"
 })
+
+app.use(router)
 
 app.use(gtag)
 

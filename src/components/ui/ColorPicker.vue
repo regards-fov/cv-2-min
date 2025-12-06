@@ -2,7 +2,6 @@
 import { ref, computed, onMounted, watch } from 'vue'
 
 const emit = defineEmits(['changeColor'])
-
 const props = defineProps({
     initialColor: { type: String, default: '#62b1c9' }
 })
@@ -12,7 +11,7 @@ const S = ref(0)
 const V = ref(0)
 const hex = ref(props.initialColor)
 
-const svEl = ref(null)
+const svCanvas = ref(null)
 const hueEl = ref(null)
 
 const sample = {
@@ -20,6 +19,25 @@ const sample = {
     pastels: ['#E3CBE2', '#E7BDBD', '#F6CFAF', '#F3E8B6', '#D2E5C3', '#B8D5E6', '#F5F5F5', '#9CA3AF']
 }
 
+// ----------------------
+// Throttle emit
+// ----------------------
+const pendingColor = ref(null)
+let scheduled = false
+
+function scheduleEmit() {
+    if (!scheduled) {
+        scheduled = true
+        requestAnimationFrame(() => {
+            emit('changeColor', pendingColor.value)
+            scheduled = false
+        })
+    }
+}
+
+// ----------------------
+// Utilitaires
+// ----------------------
 function clamp(v, a, b) { return Math.max(a, Math.min(b, v)) }
 
 function hsvToRgb(h, s, v) {
@@ -34,7 +52,9 @@ function hsvToRgb(h, s, v) {
     return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)]
 }
 
-function rgbToHex([r, g, b]) { return '#' + [r, g, b].map(n => n.toString(16).padStart(2, '0')).join('') }
+function rgbToHex([r, g, b]) {
+    return '#' + [r, g, b].map(n => n.toString(16).padStart(2, '0')).join('')
+}
 
 function hexToRgb(hexv) {
     if (!hexv) return null
@@ -44,13 +64,20 @@ function hexToRgb(hexv) {
     return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]
 }
 
-const thumbStyle = computed(() => ({ left: `${clamp(S.value, 0, 1) * 100}%`, top: `${(1 - clamp(V.value, 0, 1)) * 100}%` }))
+// ----------------------
+// Computed thumb styles
+// ----------------------
+const thumbStyle = computed(() => ({ left: `${clamp(S.value, 0, 1) * 100}%`, top: `${(1 - clamp(V.value, 0, 1)) * 100}%`, transform: 'translate(-7px,-7px)' }))
 const hthumbStyle = computed(() => ({ top: `${(H.value / 360) * 100}%`, transform: 'translateY(-50%)' }))
 
+// ----------------------
+// Convertir HSV -> Hex et émettre
+// ----------------------
 function renderFromHSV() {
-    const rgb = hsvToRgb(H.value, S.value, V.value)
-    hex.value = rgbToHex(rgb)
-    emit('changeColor', hex.value)
+    const [r, g, b] = hsvToRgb(H.value, S.value, V.value)
+    hex.value = rgbToHex([r, g, b])
+    pendingColor.value = hex.value
+    scheduleEmit()
 }
 
 function setFromHex(v) {
@@ -72,8 +99,36 @@ function setFromHex(v) {
 
 function onHexChange() { setFromHex(hex.value.trim()) }
 
+// ----------------------
+// Palette SV sur canvas
+// ----------------------
+function drawSVCanvas() {
+    if (!svCanvas.value) return
+    const ctx = svCanvas.value.getContext('2d')
+    const width = svCanvas.value.width
+    const height = svCanvas.value.height
+
+    const imageData = ctx.createImageData(width, height)
+    for (let y = 0; y < height; y++) {
+        const v = 1 - y / height
+        for (let x = 0; x < width; x++) {
+            const s = x / width
+            const [r, g, b] = hsvToRgb(H.value, s, v)
+            const idx = (y * width + x) * 4
+            imageData.data[idx] = r
+            imageData.data[idx + 1] = g
+            imageData.data[idx + 2] = b
+            imageData.data[idx + 3] = 255
+        }
+    }
+    ctx.putImageData(imageData, 0, 0)
+}
+
+// ----------------------
+// Interaction SV
+// ----------------------
 function svPointer(e) {
-    const rect = svEl.value.getBoundingClientRect()
+    const rect = svCanvas.value.getBoundingClientRect()
     const clientX = e.touches ? e.touches[0].clientX : e.clientX
     const clientY = e.touches ? e.touches[0].clientY : e.clientY
     const x = clamp(clientX - rect.left, 0, rect.width)
@@ -86,63 +141,63 @@ function svPointer(e) {
 function startSvPointer(ev) { ev.currentTarget.setPointerCapture(ev.pointerId); svPointer(ev) }
 function moveSvPointer(ev) { if (ev.currentTarget.hasPointerCapture(ev.pointerId)) svPointer(ev) }
 
+// ----------------------
+// Hue pointer
+// ----------------------
 function huePointer(e) {
     const rect = hueEl.value.getBoundingClientRect()
     const clientY = e.touches ? e.touches[0].clientY : e.clientY
     const y = clamp(clientY - rect.top, 0, rect.height)
     H.value = Math.round((y / rect.height) * 360)
+    drawSVCanvas()
     renderFromHSV()
 }
 
 function startHuePointer(ev) { ev.currentTarget.setPointerCapture(ev.pointerId); huePointer(ev) }
 function moveHuePointer(ev) { if (ev.currentTarget.hasPointerCapture(ev.pointerId)) huePointer(ev) }
 
+// ----------------------
 onMounted(() => {
     setFromHex(props.initialColor)
+    drawSVCanvas()
 })
 
 watch(() => props.initialColor, (newColor) => {
     if (newColor && newColor !== hex.value) {
         setFromHex(newColor)
+        drawSVCanvas()
     }
 })
-
 </script>
 
 <template>
     <div class="card">
         <div class="wrapper">
             <div class="palette-select">
-                <div
-                    ref="svEl"
-                    class="sv"
-                    :style="{
-                        background: `linear-gradient(transparent, #000), linear-gradient(90deg, #fff, hsl(${H}, 100%, 50%))`
-                    }"
-                    @pointerdown="startSvPointer"
-                    @pointermove="moveSvPointer"
-                    tabindex="0"
-                    aria-label="Saturation et valeur"
-                >
+                <div style="position:relative;">
+                    <canvas
+                        ref="svCanvas"
+                        width="130"
+                        height="130"
+                        @pointerdown="startSvPointer"
+                        @pointermove="moveSvPointer"
+                        tabindex="0"
+                        aria-label="Saturation et valeur"
+                    ></canvas>
                     <div
                         class="thumb"
-                        :style="{
-                            ...thumbStyle,
-                            transform: 'translate(-7px, -7px)'
-                        }"
+                        :style="thumbStyle"
                     ></div>
                 </div>
 
                 <div
                     ref="hueEl"
                     class="hue"
-                    :style="{
-                        background: 'linear-gradient(180deg, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%)'
-                    }"
                     @pointerdown="startHuePointer"
                     @pointermove="moveHuePointer"
                     tabindex="0"
                     aria-label="Teinte"
+                    :style="{ background: 'linear-gradient(180deg, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%)' }"
                 >
                     <div
                         class="hthumb"
@@ -168,12 +223,13 @@ watch(() => props.initialColor, (newColor) => {
                     v-for="(palette, category) in sample"
                     :key="category"
                 >
+
                     <h3>{{ category }}</h3>
                     <div class="swatches">
                         <div
                             v-for="c in palette"
                             :key="c"
-                            :class="['sw', { active: hex === c }]"
+                            :class="['sw', { active: props.initialColor === c }]"
                             :style="{ background: c }"
                             @click="setFromHex(c)"
                             @keydown.enter="setFromHex(c)"
@@ -189,46 +245,30 @@ watch(() => props.initialColor, (newColor) => {
 
 <style scoped>
 .card {
-    border-bottom-left-radius: 14px;
-    border-bottom-right-radius: 14px;
+    border-radius: 14px;
     padding: 21px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .wrapper {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-}
-
-.label {
-    font-size: 12pt;
-    letter-spacing: 0.8px;
-    color: #3b3b3b;
-    font-weight: 600;
+    gap: 12px
 }
 
 .palette-select {
     display: flex;
-    gap: 16px;
+    gap: 16px
 }
 
-.sv {
-    width: 130px;
-    height: 130px;
+.sv,
+canvas {
     border-radius: 12px;
-    position: relative;
-    cursor: crosshair;
     border: 2px solid #e2e8f0;
-    transition: border-color 0.2s ease;
+    cursor: crosshair;
 }
 
-.sv:hover {
-    border-color: #8b5cf6;
-}
-
-.sv .thumb {
+.thumb {
     position: absolute;
     width: 16px;
     height: 16px;
@@ -236,28 +276,18 @@ watch(() => props.initialColor, (newColor) => {
     border: 3px solid #fff;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.1);
     pointer-events: none;
-    transition: transform 0.1s ease;
-}
-
-.sv:active .thumb {
-    transform: translate(-8px, -8px) scale(1.1) !important;
 }
 
 .hue {
-    height: 130px;
     width: 28px;
+    height: 130px;
     border-radius: 12px;
-    cursor: pointer;
     border: 2px solid #e2e8f0;
     position: relative;
-    transition: border-color 0.2s ease;
+    cursor: pointer;
 }
 
-.hue:hover {
-    border-color: #8b5cf6;
-}
-
-.hue .hthumb {
+.hthumb {
     position: absolute;
     width: 100%;
     height: 8px;
@@ -270,39 +300,30 @@ watch(() => props.initialColor, (newColor) => {
 .hue-row {
     display: flex;
     gap: 12px;
-    align-items: center;
+    align-items: center
 }
 
-.controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    align-items: center;
-    width: 100%;
-}
-
-input[type="text"] {
+.controls input[type="text"] {
     padding: 6px 8px;
     border-radius: 10px;
     border: 2px solid #e2e8f0;
-    font-family: 'Monaco', 'Menlo', monospace;
     width: 100%;
+    font-family: 'Monaco', 'Menlo', monospace;
     font-size: 14px;
     font-weight: 500;
     color: #1e293b;
-    transition: all 0.2s ease;
     background: #f8fafc;
+    transition: all 0.2s ease
 }
 
-input[type="text"]:hover {
+.controls input[type="text"]:hover {
     border-color: #cbd5e1;
-    background: #ffffff;
+    background: #fff;
 }
 
-input[type="text"]:focus {
+.controls input[type="text"]:focus {
     outline: none;
     border-color: #8b5cf6;
-    background: #ffffff;
     box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
@@ -312,17 +333,13 @@ input[type="text"]:focus {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    color: #8b5cf6;
-}
-
-.palette h3:first-child {
-    margin-top: 0;
+    color: #8b5cf6
 }
 
 .swatches {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 6px
 }
 
 .sw {
@@ -331,36 +348,9 @@ input[type="text"]:focus {
     border-radius: 10px;
     border: 2px solid transparent;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
-}
-
-.sw::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2), transparent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.sw:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 1;
-}
-
-.sw:hover::before {
-    opacity: 1;
-}
-
-.sw:focus {
-    outline: none;
-    border-color: #8b5cf6;
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-    transform: scale(1.05);
-    z-index: 2;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sw.active {
