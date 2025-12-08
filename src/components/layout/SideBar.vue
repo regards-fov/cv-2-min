@@ -17,6 +17,8 @@ const props = defineProps({
 
 const $userData = computed(() => props.cvData);
 
+console.log($userData.value);
+
 const emit = defineEmits(["update:cvData", "toggleColorWheel"]);
 
 const handleSidebarResize = (event) => {
@@ -103,10 +105,6 @@ const handleClick = (e) => {
 	background-color: var(--main-color);
 }
 
-// .template-air .box-color {
-//   background-color: transparent;
-// }
-
 .box-color:hover {
 	box-shadow: 0 0 0 2px rgb(112, 181, 255),
 		6px 0 12px -3px rgba(112, 181, 255, 0.3),
@@ -128,17 +126,28 @@ const handleClick = (e) => {
 	border-radius: var(--sidebar-radius);
 	white-space: normal;
 	word-break: break-word;
+
+	& .block {
+		padding-left: 12px;
+		padding-right: 12px;
+		margin-bottom: 8px;
+		border-radius: 6px;
+
+	}
+
+	& .block:first-child {
+		padding-top: 14px;
+	}
+
+	& .block:last-child {
+		padding-bottom: 14px;
+	}
 }
 
 :deep(.sidebar-label) {
 	font-size: larger;
 	font-weight: bold;
 	margin-bottom: 6px;
-}
-
-.block {
-	border-radius: 6px;
-	margin: 14px 12px 4px 12px;
 }
 
 .hobbies {
@@ -162,7 +171,8 @@ const handleClick = (e) => {
 :deep(.list) {
 	display: flex;
 	flex-direction: column;
-	margin: 4px 0 -8px 0px;
+	margin: auto;
+	// margin: 4px 0 -8px 0px;
 	gap: 3px;
 
 	li {

@@ -78,9 +78,9 @@ const removeItem = (index) => {
                         v-model="cvData.cv.spokenLanguages[index].level"
                     >
                         <option value="--">--</option>
-                        <option value="A1">Débutant</option>
-                        <option value="B2">Intermédiaire</option>
-                        <option value="C1">Avancé</option>
+                        <option value="beginner">Débutant</option>
+                        <option value="intermediate">Intermédiaire</option>
+                        <option value="advanced">Avancé</option>
                     </select>
                 </label>
 

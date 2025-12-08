@@ -70,7 +70,6 @@ const handleBlur = () => {
 <template>
     <div
         :class="fieldClasses"
-        :id="label"
         v-show="!editing"
         @click="activateEditing"
         v-bind="$attrs"
@@ -81,7 +80,6 @@ const handleBlur = () => {
     <input
         ref="inputRef"
         :name="label"
-        :id="`${label}-input`"
         :class="inputClasses"
         autocomplete="off"
         v-show="editing"

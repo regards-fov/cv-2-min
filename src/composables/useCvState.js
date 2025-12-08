@@ -1,45 +1,41 @@
-import { ref, computed, watch } from 'vue'
-import { useLocalStorage } from "./useLocalStorage";
-import cvType1 from "../resources/cvType1.json";
-import cvType2 from "../resources/cvType2.json";
+import { ref, computed, watch } from "vue"
+import { useLocalStorage } from "./useLocalStorage"
+import cvType from "../resources/cvType.json"
 
-const cvModels = {
-    'cvType1': cvType1,
-    'cvType2': cvType2
-};
-
-const currentModel = ref('cvType1');
-
-// Créé une nouvelle instance de storage
-const createStorage = (modelKey) => {
-    return useLocalStorage(modelKey, cvModels[modelKey]);
-};
-
-let localStorage = createStorage(currentModel.value);
-
-// Reactive ref pour les données
-const cvData = ref(localStorage.data.value);
-
-// Watch pour synchroniser les changements de données avec le localStorage
-watch(cvData, (newData) => {
-    localStorage.data.value = newData;
-}, { deep: true });
+const currentModel = ref(null)
+const cvData = ref(null)
+let cvStorage = null
 
 export function useCvState() {
     const loadModel = (model) => {
-        currentModel.value = model;
-        // Créer une nouvelle instance de storage
-        localStorage = createStorage(model);
-        // Mettre à jour les données réactives
-        cvData.value = localStorage.data.value;
-    };
+        currentModel.value = model
+        cvStorage = useLocalStorage(model, cvType)
 
-    const initCV = () => {
-        localStorage.clear()
-        cvData.value = structuredClone(cvModels[currentModel.value])
+        cvData.value = cvStorage.data.value
+
+        console.log('Model loaded:', model)
+        console.log('cvData:', cvData.value)
     }
 
-    const defaultCvData = computed(() => cvModels[currentModel.value])
+    // Watch pour synchroniser les changements vers le storage
+    // Ce watch est créé UNE FOIS au niveau du module
+    watch(
+        cvData,
+        (newData) => {
+            if (cvStorage && newData !== null) {
+                cvStorage.data.value = newData
+            }
+        },
+        { deep: true }
+    )
+
+    const initCV = () => {
+        if (!cvStorage) return
+        cvStorage.clear()
+        cvData.value = structuredClone(cvType)
+    }
+
+    const defaultCvData = computed(() => cvType)
 
     return {
         cvData,

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, inject, nextTick } from 'vue'
+import { ref, inject, nextTick, onMounted } from 'vue'
 import ButtonAddContact from "../ui/ButtonAddContact.vue";
 import ItemEditable from '../ui/ItemEditable.vue'
 import ButtonRemoveItem from "../ui/ButtonRemoveItem.vue";
@@ -8,6 +8,7 @@ import { useDraggable } from '@/composables/useDraggable'
 
 const cvData = inject('cvData')
 const defaultCvData = inject('defaultCvData')
+
 const focusTarget = ref(null)
 
 const {
@@ -46,6 +47,7 @@ const removeContact = (index) => {
         }
     }
 }
+
 </script>
 
 <template>

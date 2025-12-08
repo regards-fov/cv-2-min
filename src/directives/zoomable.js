@@ -49,7 +49,6 @@ export const vZoom = {
         el._zoom = {
             in: () => updateZoom(currentZoom + options.zoomStep),
             out: () => updateZoom(currentZoom - options.zoomStep),
-            reset: () => updateZoom(options.initialZoom),
             set: (z) => updateZoom(z),
             get: () => currentZoom,
             onChange: (cb) => { el._zoomExternalCallback = cb; }

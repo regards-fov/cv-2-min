@@ -3,7 +3,8 @@ import { ref, computed } from 'vue'
 import ButtonRemoveItem from "../ui/ButtonRemoveItem.vue"
 import CropModal from "./CropModal.vue"
 import uploadIcon from '@icons/upload.svg'
-import { getDefaultPicture } from '../../utils/defaultImage'
+import defaulPicture from '../../assets/img/default-picture.png'
+
 import {
     validateFileSize,
     validateFileType,
@@ -18,16 +19,16 @@ const tempImageSrc = ref('')
 const error = ref('')
 const isProcessing = ref(false)
 
-const displayImage = computed(() =>
-    picture.value.path && picture.value.path !== ''
-        ? picture.value.path
-        : getDefaultPicture('female')
-)
+const displayImage = computed(() => {
+    if (picture.value.path && picture.value.path !== '') {
+        return picture.value.path
+    }
+})
 
 const isDisabled = () => !picture.value.path || picture.value.path === ""
 
 const removePicture = () => {
-    picture.value.path = ""
+    picture.value.path = defaulPicture
     error.value = ''
 }
 
@@ -56,10 +57,8 @@ const uploadPicture = async (e) => {
     isProcessing.value = true
 
     try {
-        // Conversion en base64
         const base64 = await fileToBase64(file)
 
-        // Compression initiale si l'image est très grande
         const compressed = await compressImage(base64, 0.9, 1920, 1920)
 
         tempImageSrc.value = compressed

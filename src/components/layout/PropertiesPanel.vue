@@ -1,11 +1,13 @@
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, inject } from "vue";
 import PropertiesPanelButton from '../propertiesPanel/PropertiesPanelButton.vue';
 import PropertiesPanelActions from '../propertiesPanel/PropertiesPanelActions.vue';
 import PropertiesPanelDesign from '../propertiesPanel/PropertiesPanelDesign.vue';
 import PropertiesPanelLayout from '../propertiesPanel/PropertiesPanelLayout.vue';
 import PropertiesPanelTemplate from "../propertiesPanel/PropertiesPanelTemplate.vue";
 import iconCollapse from '@icons/collapse.svg';
+
+const cvData = inject('cvData')
 
 const props = defineProps({
     isColorWheelOpen: { type: Boolean, required: true },
@@ -79,7 +81,16 @@ const containerClass = computed(() => ({
 </script>
 
 <template>
+
     <div :class="containerClass">
+        <button onclick="localStorage.clear()">X LS</button>
+
+        <img
+            :src="cvData.cv.picture.path"
+            class="picture_thumbnail"
+            alt="user_picture"
+        />
+
         <PropertiesPanelButton
             variant="collapse"
             :icon="iconCollapse"
@@ -143,5 +154,12 @@ const containerClass = computed(() => ({
     width: 64px;
     padding-left: 8px;
     padding-right: 8px;
+}
+
+.picture_thumbnail {
+    width: 44px;
+    height: 44px;
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 50%;
 }
 </style>

@@ -1,13 +1,16 @@
 <script setup>
-import { ref, provide, onMounted } from 'vue'
+import { ref, provide, onMounted, watch, nextTick } from 'vue'
 import { useCvState } from "../composables/useCvState";
 import { useCssSync } from '../composables/useCssSync'
 import PropertiesPanel from "../components/layout/PropertiesPanel.vue"
 import MainSection from "../components/layout/MainSection.vue";
 import Sidebar from "../components/layout/SideBar.vue";
 import { vZoom } from '../directives/zoomable';
+import { useRoute } from 'vue-router'
 
-const { cvData, defaultCvData } = useCvState();
+const route = useRoute()
+
+const { cvData, defaultCvData, loadModel } = useCvState();
 
 provide('cvData', cvData);
 provide('defaultCvData', defaultCvData);
@@ -25,6 +28,8 @@ const toggleColorWheel = () => {
     }
 };
 
+// Initialiser useCssSync directement dans le setup (pas dans un watch)
+// On protège l'accès aux données dans useCssSync lui-même
 useCssSync(cvData, [
     {
         path: 'configuration.sidebar.color',
@@ -37,7 +42,9 @@ useCssSync(cvData, [
 ])
 
 const handleChangeColor = (color) => {
-    cvData.value.configuration.sidebar.color = color;
+    if (cvData.value) {
+        cvData.value.configuration.sidebar.color = color;
+    }
 }
 
 const position = ref({ x: 0, y: 0 });
@@ -58,13 +65,29 @@ const centerContainer = () => {
     };
 };
 
+watch(
+    () => cvData.value,
+    () => {
+        if (cvData.value) {
+            // Attendre que le DOM soit rendu
+            nextTick(() => {
+                if (zoomable.value?._zoom) {
+                    zoomable.value._zoom.onChange((z) => {
+                        zoom.value = Math.round(z * 100);
+                    });
+                }
+                centerContainer();
+            });
+        }
+    },
+    { immediate: true }
+);
+
 onMounted(() => {
-    if (zoomable.value?._zoom) {
-        zoomable.value._zoom.onChange((z) => {
-            zoom.value = Math.round(z * 100);
-        });
+    const cvSlug = route.params.id
+    if (cvSlug) {
+        loadModel(cvSlug)
     }
-    centerContainer();
 });
 
 const handleMouseDown = (e) => {
@@ -92,64 +115,75 @@ const handleMouseUp = () => {
 </script>
 
 <template>
-    <RouterView />
+    <div v-if="cvData">
 
-    <PropertiesPanel
-        :isColorWheelOpen="isColorWheelOpen"
-        :currentColor="cvData.configuration.sidebar.color"
-        :collapsed="isPanelCollapsed"
-        @toggleColorWheel="toggleColorWheel"
-        @changeColor="handleChangeColor"
-        @update:collapsed="isPanelCollapsed = $event"
-    />
+        <RouterView />
 
-    <div class="zoom-controls">
-        <button @click="zoomable._zoom.out()">−</button>
-        <div class="zoom-level">{{ zoom }}%</div>
-        <button @click="zoomable._zoom.in()">+</button>
-        <button @click="zoomable._zoom.reset()">⟲</button>
-    </div>
+        <PropertiesPanel
+            :isColorWheelOpen="isColorWheelOpen"
+            :currentColor="cvData.configuration.sidebar.color"
+            :collapsed="isPanelCollapsed"
+            @toggleColorWheel="toggleColorWheel"
+            @changeColor="handleChangeColor"
+            @update:collapsed="isPanelCollapsed = $event"
+        />
 
-    <div
-        ref="zoomable"
-        v-zoom="{ initialZoom: zoom }"
-        class="zoomable drag-area"
-        @mousedown="handleMouseDown"
-        @mousemove="handleMouseMove"
-        @mouseup="handleMouseUp"
-    >
+        <div class="zoom-controls">
+            <button @click="zoomable._zoom.out()">−</button>
+            <div class="zoom-level">{{ zoom }}%</div>
+            <button @click="zoomable._zoom.in()">+</button>
+        </div>
+
         <div
-            id="a4-container"
-            :class="cvData.configuration.template"
-            :style="{
-                position: 'absolute',
-                left: position.x + 'px',
-                top: position.y + 'px',
-                pointerEvents: 'none'
-            }"
+            ref="zoomable"
+            v-zoom="{ initialZoom: zoom }"
+            class="zoomable drag-area"
+            @mousedown="handleMouseDown"
+            @mousemove="handleMouseMove"
+            @mouseup="handleMouseUp"
         >
-            <div class="top-layout"></div>
+            <div
+                id="a4-container"
+                :class="cvData.configuration.template"
+                :style="{
+                    position: 'absolute',
+                    left: position.x + 'px',
+                    top: position.y + 'px',
+                    pointerEvents: 'none'
+                }"
+            >
+                <div class="top-layout"></div>
 
-            <div class="container">
-                <Sidebar
-                    :cvData="cvData"
-                    @update:cvData="cvData = $event"
-                    @toggleColorWheel="toggleColorWheel"
-                />
+                <div class="container">
+                    <Sidebar
+                        :cvData="cvData"
+                        @update:cvData="cvData = $event"
+                        @toggleColorWheel="toggleColorWheel"
+                    />
 
-                <MainSection
-                    :cvData="cvData"
-                    @update:cvData="cvData = $event"
-                />
+                    <MainSection
+                        :cvData="cvData"
+                        @update:cvData="cvData = $event"
+                    />
+                </div>
             </div>
         </div>
-    </div>
 
+        <div
+            class="disclaimer"
+            v-show="!isLocalhost"
+        >Ce que vous voyez ici est une démo fonctionnelle, gardez à l'esprit
+            que certains dysfonctionnements peuvent survenir !</div>
+    </div>
     <div
-        class="disclaimer"
-        v-show="!isLocalhost"
-    >Ce que vous voyez ici est une démo fonctionnelle, gardez à l'esprit
-        que certains dysfonctionnements peuvent survenir !</div>
+        v-else
+        class="loader-container"
+    >
+        <div class="loader">
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Chargement du CV...</p>
+        </div>
+    </div>
 </template>
 
 <style scoped lang="scss">
@@ -296,38 +330,19 @@ const handleMouseUp = () => {
     }
 }
 
-.zoomable-wrapper {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-    background: white;
-    margin: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.zoomable-content {
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    transform-origin: center center;
-    transition: transform 0.2s ease;
-    padding: 30px;
-}
-
 .zoom-controls {
+    display: flex;
     position: fixed;
     top: 10px;
     right: 10px;
     background: rgba(0, 0, 0, 0.7);
     padding: 10px;
     border-radius: 5px;
-    display: flex;
     gap: 10px;
     z-index: 10;
 }
 
-.zoom-btn {
+.zoom-controls button {
     background: white;
     border: none;
     width: 35px;
@@ -349,5 +364,41 @@ const handleMouseUp = () => {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 3px;
     font-size: 14px;
+}
+
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.loader-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #e0e0e0;
+    border-top-color: #62b1c9;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.loader-text {
+    color: #666;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 </style>

@@ -1,7 +1,9 @@
-import { watch, onMounted } from 'vue'
+import { watch, nextTick } from 'vue'
 
 export function useCssSync(dataRef, mappings) {
     const applyCssVars = () => {
+        if (!dataRef.value) return
+
         mappings.forEach(({ path, cssVar, transform }) => {
             const value = getNestedValue(dataRef.value, path)
             if (value !== undefined) {
@@ -16,12 +18,12 @@ export function useCssSync(dataRef, mappings) {
         return path.split('.').reduce((current, key) => current?.[key], obj)
     }
 
-    // Appliquer au montage (chargement initial depuis localStorage)
-    onMounted(() => {
-        applyCssVars()
-    })
+    // Appliquer immédiatement si les données sont disponibles
+    if (dataRef.value) {
+        nextTick(() => applyCssVars())
+    }
 
-    // Synchroniser
+    // Synchroniser les changements
     watch(dataRef, applyCssVars, { deep: true })
 
     return { applyCssVars }
