@@ -1,14 +1,14 @@
 <script setup>
 import { ref, inject } from 'vue'
-import ButtonRemoveItem from "../ui/ButtonRemoveItem.vue";
-import ButtonAddLanguage from "../ui/ButtonAddLanguage.vue";
+import RemoveItemButton from "../ui/RemoveItemButton.vue";
+import AddItemButton from "../ui/AddItemButton.vue";
 import languages from "../../resources/languages.json";
 
 const cvData = inject('cvData')
 
 const languageList = ref(languages)
 
-const addLanguage = () => {
+const handleAddLanguage = () => {
     const maxKey = Math.max(
         ...cvData.value.cv.spokenLanguages.map(lang =>
             parseInt(lang.key.replace('lang', '')) || 0
@@ -84,7 +84,7 @@ const removeItem = (index) => {
                     </select>
                 </label>
 
-                <ButtonRemoveItem
+                <RemoveItemButton
                     :show="cvData.cv.spokenLanguages.length > 1"
                     @click="removeItem(index)"
                 />
@@ -92,7 +92,10 @@ const removeItem = (index) => {
             </li>
             <!-- <div> (TOEIC 960/990) </div> -->
 
-            <ButtonAddLanguage @addLanguage="addLanguage" />
+            <AddItemButton
+                aria-label="Ajouter une nouvelle langue"
+                @click="handleAddLanguage"
+            />
         </ul>
     </div>
 </template>

@@ -1,7 +1,7 @@
 <script setup>
 
 import { computed } from 'vue'
-import ButtonRemoveItem from "../ui/ButtonRemoveItem.vue";
+import RemoveItemButton from "../ui/RemoveItemButton.vue";
 import Resume from "../blocks/Resume.vue";
 import ExperienceLayout from "../blocks/ExperienceLayout.vue"
 import draggable from 'vuedraggable'
@@ -91,7 +91,7 @@ const removeItem = (category, index) => {
                                 v-model="$cv.jobs[index]"
                             />
                             <div class="user-actions">
-                                <ButtonRemoveItem @click="removeItem('jobs', index)" />
+                                <RemoveItemButton @click="removeItem('jobs', index)" />
                             </div>
                         </div>
                     </li>
@@ -125,7 +125,7 @@ const removeItem = (category, index) => {
                                     type="education"
                                     v-model="$cv.education[index]"
                                 />
-                                <ButtonRemoveItem @click="removeItem('education', index)" />
+                                <RemoveItemButton @click="removeItem('education', index)" />
                             </div>
                         </li>
                     </template>

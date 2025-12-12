@@ -1,8 +1,8 @@
 <script setup>
-import { ref, inject, nextTick, onMounted } from 'vue'
-import ButtonAddContact from "../ui/ButtonAddContact.vue";
+import { ref, inject, nextTick } from 'vue'
+import AddItemButton from "../ui/AddItemButton.vue";
 import ItemEditable from '../ui/ItemEditable.vue'
-import ButtonRemoveItem from "../ui/ButtonRemoveItem.vue";
+import RemoveItemButton from "../ui/RemoveItemButton.vue";
 import draggable from 'vuedraggable'
 import { useDraggable } from '@/composables/useDraggable'
 
@@ -25,7 +25,7 @@ const focusNewInput = async (keys) => {
     focusTarget.value = cvData.value.cv[keys].length
 }
 
-const addContact = (key, value) => {
+const handleAddContact = (key, value) => {
     cvData.value = {
         ...cvData.value,
         cv: {
@@ -82,7 +82,7 @@ const removeContact = (index) => {
                             :must-focus="focusTarget === cvData.cv.contact.length"
                             placeholder="Nouveau contact"
                         />
-                        <ButtonRemoveItem
+                        <RemoveItemButton
                             :show="cvData.cv.contact.length > 1"
                             @click="removeContact(index)"
                         />
@@ -90,10 +90,11 @@ const removeContact = (index) => {
                 </li>
             </template>
             <template #footer>
-                <ButtonAddContact
+                <AddItemButton
+                    aria-label="Ajouter un nouveau contact"
                     :storedData="cvData.cv.contact"
                     :defaultData="defaultCvData.cv.contact"
-                    @addContact="addContact"
+                    @click="handleAddContact"
                 />
             </template>
         </draggable>

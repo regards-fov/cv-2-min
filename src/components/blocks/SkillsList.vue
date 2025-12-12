@@ -1,8 +1,8 @@
 <script setup>
 import { ref, inject, nextTick } from 'vue'
 import ItemEditable from '../ui/ItemEditable.vue'
-import ButtonRemoveItem from "../ui/ButtonRemoveItem.vue"
-import ButtonAddSkill from "../ui/ButtonAddSkill.vue"
+import RemoveItemButton from "../ui/RemoveItemButton.vue";
+import AddItemButton from "../ui/AddItemButton.vue"
 import draggable from 'vuedraggable'
 import { useDraggable } from '@/composables/useDraggable'
 
@@ -23,7 +23,7 @@ const focusNewInput = async (keys) => {
     focusTarget.value = cvData.value.cv[keys].length
 }
 
-const addSkills = () => {
+const handleAddSkill = () => {
     cvData.value = {
         ...cvData.value,
         cv: {
@@ -77,7 +77,7 @@ const removeSkill = (index) => {
                             :must-focus="focusTarget === (cvData.cv.skills.length)"
                             placeholder="Nouvelle compétence"
                         />
-                        <ButtonRemoveItem
+                        <RemoveItemButton
                             :show="cvData.cv.skills.length > 1"
                             @click="removeSkill(index)"
                         />
@@ -85,7 +85,10 @@ const removeSkill = (index) => {
                 </li>
             </template>
             <template #footer>
-                <ButtonAddSkill @addSkill="addSkills" />
+                <AddItemButton
+                    aria-label="Ajouter une nouvelle compétence"
+                    @click="handleAddSkill"
+                />
             </template>
         </draggable>
     </div>
