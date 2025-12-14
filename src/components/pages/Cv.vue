@@ -1,8 +1,9 @@
 <script setup>
-import { ref, provide, onMounted, watch, nextTick } from 'vue'
+import { ref, provide, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCvState } from "@composables/useCvState";
 import { useCssSync } from '@composables/useCssSync'
+import { useDraggableDocument } from '@composables/useDraggableDocument'
 import { vZoom } from '@directives/zoomable';
 import MainSection from "../layout/MainSection.vue";
 import PropertiesPanel from "../layout/propertiesPanel/PropertiesPanel.vue"
@@ -11,6 +12,8 @@ import Sidebar from "../layout/SideBar.vue";
 const route = useRoute()
 
 const { cvData, defaultCvData, loadModel } = useCvState();
+
+const userCanEdit = computed(() => route.name === 'cv.edit')
 
 provide('cvData', cvData);
 provide('defaultCvData', defaultCvData);
@@ -21,6 +24,14 @@ const isPanelCollapsed = ref(true);
 const zoomable = ref(null);
 const zoom = ref(100);
 
+const {
+    position,
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    initializeZoomWatcher
+} = useDraggableDocument(zoom, zoomable)
+
 const toggleColorWheel = () => {
     isColorWheelOpen.value = !isColorWheelOpen.value;
     if (isColorWheelOpen.value && isPanelCollapsed.value) {
@@ -28,8 +39,6 @@ const toggleColorWheel = () => {
     }
 };
 
-// Initialiser useCssSync directement dans le setup (pas dans un watch)
-// On protège l'accès aux données dans useCssSync lui-même
 useCssSync(cvData, [
     {
         path: 'configuration.sidebar.color',
@@ -47,76 +56,22 @@ const handleChangeColor = (color) => {
     }
 }
 
-const position = ref({ x: 0, y: 0 });
-const isDragging = ref(false);
-const dragOffset = ref({ x: 0, y: 0 });
-
-const centerContainer = () => {
-    const container = document.getElementById('a4-container');
-    if (!container) return;
-
-    const scale = zoom.value / 100;
-    const scaledWidth = container.offsetWidth * scale;
-    const scaledHeight = container.offsetHeight * scale;
-
-    position.value = {
-        x: (window.innerWidth - scaledWidth) / 2,
-        y: (window.innerHeight - scaledHeight) / 2
-    };
-};
-
-watch(
-    () => cvData.value,
-    () => {
-        if (cvData.value) {
-            // Attendre que le DOM soit rendu
-            nextTick(() => {
-                if (zoomable.value?._zoom) {
-                    zoomable.value._zoom.onChange((z) => {
-                        zoom.value = Math.round(z * 100);
-                    });
-                }
-                centerContainer();
-            });
-        }
-    },
-    { immediate: true }
-);
+initializeZoomWatcher(cvData)
 
 onMounted(() => {
-    const cvSlug = route.params.id
-    if (cvSlug) {
+    const cvSlug = route.params.slug
+    if (cvSlug && localStorage.getItem(cvSlug)) {
         loadModel(cvSlug)
     }
-});
+})
 
-const handleMouseDown = (e) => {
-    if (e.target.classList.contains('drag-area')) {
-        isDragging.value = true;
-        dragOffset.value = {
-            x: e.clientX - position.value.x,
-            y: e.clientY - position.value.y
-        };
-    }
-};
-
-const handleMouseMove = (e) => {
-    if (isDragging.value) {
-        position.value = {
-            x: e.clientX - dragOffset.value.x,
-            y: e.clientY - dragOffset.value.y
-        };
-    }
-};
-
-const handleMouseUp = () => {
-    isDragging.value = false;
-};
 </script>
 
 <template>
-    <div v-if="cvData">
-
+    <div
+        v-if="cvData"
+        :class="{ 'read-only-mode': !userCanEdit }"
+    >
         <RouterView />
 
         <PropertiesPanel
@@ -172,8 +127,16 @@ const handleMouseUp = () => {
         <div
             class="disclaimer"
             v-show="!isLocalhost"
-        >Ce que vous voyez ici est une démo fonctionnelle, gardez à l'esprit
-            que certains dysfonctionnements peuvent survenir !</div>
+        >
+            Ce que vous voyez ici est une démo fonctionnelle, gardez à l'esprit
+            que certains dysfonctionnements peuvent survenir !
+            <span
+                v-if="!userCanEdit"
+                style="display: block; margin-top: 5px; font-weight: bold;"
+            >
+                👁️ Mode lecture seule
+            </span>
+        </div>
     </div>
     <div
         v-else
@@ -400,5 +363,10 @@ const handleMouseUp = () => {
     to {
         transform: rotate(360deg);
     }
+}
+</style>
+<style>
+* {
+    /* pointer-events: none */
 }
 </style>

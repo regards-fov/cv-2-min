@@ -7,6 +7,7 @@ const cvData = ref(null)
 let cvStorage = null
 
 export function useCvState() {
+    console.log('useCVState ');
     const loadModel = (model) => {
         currentModel.value = model
         cvStorage = useLocalStorage(model, cvType)

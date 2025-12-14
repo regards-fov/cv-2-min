@@ -52,16 +52,16 @@ const handleSubmit = async () => {
 
         const data = await response.json()
 
-        localStorage.setItem(`token`, data.token)
+        localStorage.setItem('token', data.token)
 
         if (redirectTo.value) {
-            console.log("if");
+            console.log("redirectTo" + redirectTo.value);
             router.push(redirectTo.value)
         } else if (data.slug) {
-            console.log("else if");
+            console.log("redirect to data slug");
             router.push(`/cv/${data.slug}`)
         } else {
-            console.log("else");
+            console.log("else redirect to /cv");
             router.push('/cv')
         }
 
