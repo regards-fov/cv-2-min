@@ -40,4 +40,8 @@ const cvData = defineModel({ type: Object, required: true })
 #lookupJob>* {
     padding: 0px 2px;
 }
+
+#lookupJob {
+    line-height: 19pt;
+}
 </style>

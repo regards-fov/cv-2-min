@@ -36,6 +36,7 @@ const handleSubmit = async () => {
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify({
                 email: email.value,
                 password: password.value
@@ -51,8 +52,6 @@ const handleSubmit = async () => {
         }
 
         const data = await response.json()
-
-        localStorage.setItem('token', data.token)
 
         if (redirectTo.value) {
             console.log("redirectTo" + redirectTo.value);

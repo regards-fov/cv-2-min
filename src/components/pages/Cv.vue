@@ -1,28 +1,34 @@
 <script setup>
 import { ref, provide, onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { useCvState } from "@composables/useCvState";
+import { useRoute, useRouter } from 'vue-router'
+import { useCvState } from "@composables/useCvState"
+import { useAutoSave } from "@composables/useAutoSave"
+import { useAuth } from "@composables/useAuth"
 import { useCssSync } from '@composables/useCssSync'
 import { useDraggableDocument } from '@composables/useDraggableDocument'
-import { vZoom } from '@directives/zoomable';
-import MainSection from "../layout/MainSection.vue";
+import { useLoginModal } from '@composables/useLoginModal'
+import { vZoom } from '@directives/zoomable'
+import MainSection from "../layout/MainSection.vue"
 import PropertiesPanel from "../layout/propertiesPanel/PropertiesPanel.vue"
-import Sidebar from "../layout/SideBar.vue";
+import Sidebar from "../layout/SideBar.vue"
 
 const route = useRoute()
+const router = useRouter()
 
-const { cvData, defaultCvData, loadModel } = useCvState();
+const { getUser } = useAuth()
+const cvState = useCvState()
+const isLoading = ref(true)
 
 const userCanEdit = computed(() => route.name === 'cv.edit')
 
-provide('cvData', cvData);
-provide('defaultCvData', defaultCvData);
+provide('cvData', cvState.cvData)
+provide('defaultCvData', cvState.defaultCvData)
 
 const isLocalhost = window.location.hostname === 'localhost'
-const isColorWheelOpen = ref(false);
-const isPanelCollapsed = ref(true);
-const zoomable = ref(null);
-const zoom = ref(100);
+const isColorWheelOpen = ref(false)
+const isPanelCollapsed = ref(true)
+const zoomable = ref(null)
+const zoom = ref(100)
 
 const {
     position,
@@ -33,13 +39,13 @@ const {
 } = useDraggableDocument(zoom, zoomable)
 
 const toggleColorWheel = () => {
-    isColorWheelOpen.value = !isColorWheelOpen.value;
+    isColorWheelOpen.value = !isColorWheelOpen.value
     if (isColorWheelOpen.value && isPanelCollapsed.value) {
-        isPanelCollapsed.value = false;
+        isPanelCollapsed.value = false
     }
-};
+}
 
-useCssSync(cvData, [
+useCssSync(cvState.cvData, [
     {
         path: 'configuration.sidebar.color',
         cssVar: '--main-color'
@@ -51,32 +57,116 @@ useCssSync(cvData, [
 ])
 
 const handleChangeColor = (color) => {
-    if (cvData.value) {
-        cvData.value.configuration.sidebar.color = color;
+    if (cvState.cvData.value) {
+        cvState.cvData.value.configuration.sidebar.color = color
     }
 }
 
-initializeZoomWatcher(cvData)
+initializeZoomWatcher(cvState.cvData)
 
-onMounted(() => {
-    const cvSlug = route.params.slug
-    if (cvSlug && localStorage.getItem(cvSlug)) {
-        loadModel(cvSlug)
+const cvSlug = route.params.slug
+
+useAutoSave(cvState, {
+    intervalMs: 30000,
+    saveOnUnload: true,
+    saveOnVisibilityChange: true,
+    saveOnBlur: true
+})
+
+onMounted(async () => {
+    if (!cvSlug) {
+        console.warn('Aucun slug dans URL')
+        router.push({ name: 'home' })
+        return
+    }
+
+    try {
+        const userData = await getUser()
+
+        if (!userData) {
+            console.warn('User non authentifié')
+            useLoginModal().open(router.currentRoute.value.fullPath)
+            router.push({ name: 'home' })
+            return
+        }
+
+        if (userData.cvSlug !== cvSlug) {
+            console.warn('Slug URL ne correspond pas au slug user')
+            router.push({ name: 'cv.edit', params: { slug: userData.cvSlug } })
+            return
+        }
+
+        console.log('✅ User authentifié, slug validé')
+
+        cvState.loadModel(cvSlug, userData.cvData, userData.updatedAt)
+
+        console.log('✅ Auto-save activé')
+
+    } catch (error) {
+        console.error('❌ Erreur initialisation:', error)
+        router.push({ name: 'error' })
+    } finally {
+        isLoading.value = false
     }
 })
 
 </script>
 
 <template>
+    <!-- Loader -->
     <div
-        v-if="cvData"
+        v-if="isLoading"
+        class="loader-container"
+    >
+        <div class="loader">
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Chargement du CV...</p>
+        </div>
+    </div>
+
+    <!-- Contenu principal -->
+    <div
+        v-else-if="cvState.cvData.value"
         :class="{ 'read-only-mode': !userCanEdit }"
     >
         <RouterView />
 
+        <!-- Indicateur de sauvegarde discret -->
+        <transition name="fade">
+            <div
+                v-if="cvState.isSaving.value || cvState.isDirty.value"
+                class="autosave-indicator"
+            >
+                <div
+                    v-if="cvState.isSaving.value"
+                    class="status saving"
+                >
+                    <div class="spinner-small"></div>
+                    <span>Sauvegarde...</span>
+                </div>
+                <div
+                    v-else
+                    class="status unsaved"
+                >
+                    <span class="dot"></span>
+                    <span>Non sauvegardé</span>
+                </div>
+            </div>
+        </transition>
+
+        <!-- Toast d'erreur -->
+        <transition name="fade">
+            <div
+                v-if="cvState.error.value"
+                class="error-toast"
+            >
+                ⚠️ {{ cvState.error.value }}
+            </div>
+        </transition>
+
         <PropertiesPanel
             :isColorWheelOpen="isColorWheelOpen"
-            :currentColor="cvData.configuration.sidebar.color"
+            :currentColor="cvState.cvData.value.configuration.sidebar.color"
             :collapsed="isPanelCollapsed"
             @toggleColorWheel="toggleColorWheel"
             @changeColor="handleChangeColor"
@@ -99,7 +189,7 @@ onMounted(() => {
         >
             <div
                 id="a4-container"
-                :class="cvData.configuration.template"
+                :class="cvState.cvData.value.configuration.template"
                 :style="{
                     position: 'absolute',
                     left: position.x + 'px',
@@ -111,14 +201,14 @@ onMounted(() => {
 
                 <div class="container">
                     <Sidebar
-                        :cvData="cvData"
-                        @update:cvData="cvData = $event"
+                        :cvData="cvState.cvData.value"
+                        @update:cvData="cvState.cvData.value = $event"
                         @toggleColorWheel="toggleColorWheel"
                     />
 
                     <MainSection
-                        :cvData="cvData"
-                        @update:cvData="cvData = $event"
+                        :cvData="cvState.cvData.value"
+                        @update:cvData="cvState.cvData.value = $event"
                     />
                 </div>
             </div>
@@ -136,15 +226,6 @@ onMounted(() => {
             >
                 👁️ Mode lecture seule
             </span>
-        </div>
-    </div>
-    <div
-        v-else
-        class="loader-container"
-    >
-        <div class="loader">
-            <div class="loader-spinner"></div>
-            <p class="loader-text">Chargement du CV...</p>
         </div>
     </div>
 </template>
@@ -291,6 +372,11 @@ onMounted(() => {
     .zoom-controls {
         display: none !important;
     }
+
+    .autosave-indicator,
+    .error-toast {
+        display: none !important;
+    }
 }
 
 .zoom-controls {
@@ -364,9 +450,85 @@ onMounted(() => {
         transform: rotate(360deg);
     }
 }
-</style>
-<style>
-* {
-    /* pointer-events: none */
+
+/* Indicateur de sauvegarde */
+.autosave-indicator {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-size: 0.875rem;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status.saving {
+    color: #2563eb;
+}
+
+.status.unsaved {
+    color: #64748b;
+}
+
+.spinner-small {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #f3f4f6;
+    border-top-color: #2563eb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    background: #f59e0b;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.error-toast {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    padding: 12px 16px;
+    background: #fee2e2;
+    color: #dc2626;
+    border-radius: 8px;
+    border-left: 4px solid #dc2626;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    font-size: 0.875rem;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>

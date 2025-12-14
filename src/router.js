@@ -13,43 +13,9 @@ const routes = [
         path: '/cv',
         name: 'cv',
         component: { template: '<div></div>' },
-        beforeEnter: async (to, from, next) => {
-            const token = localStorage.getItem('token')
-
-            if (!token) {
-                console.log('no token!');
-                useLoginModal().open('/cv')
-                next({ name: 'home' })
-                return
-            }
-
-            try {
-                const response = await fetch("http://localhost:3000/api/auth/me", {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': token
-                    }
-                })
-
-                if (!response.ok) {
-                    localStorage.removeItem('token')
-                    useLoginModal().open('/cv')
-                    next({ name: 'home' })
-                    return
-                }
-
-                const user = await response.json()
-
-                next({
-                    name: 'cv.edit',
-                    params: { slug: user.slug }
-                })
-            } catch (error) {
-                console.error('Auth error:', error)
-                localStorage.removeItem('token')
-                useLoginModal().open('/cv')
-                next({ name: 'home' })
-            }
+        meta: {
+            requireAuth: true,
+            authGuard: 'redirectToUserCv'
         }
     },
     {
@@ -61,7 +27,10 @@ const routes = [
         path: '/cv/:slug/edit',
         name: 'cv.edit',
         component: Cv,
-        meta: { requireAuth: true }
+        meta: {
+            requireAuth: true,
+            authGuard: 'mustOwnResource'
+        }
     },
     {
         path: '/:pathMatch(.*)*',
@@ -69,6 +38,22 @@ const routes = [
         redirect: { name: 'home' }
     }
 ]
+
+const authGuards = {
+    redirectToUserCv: (to, user) => {
+        console.log(user);
+        console.log('ici');
+        return { name: 'cv.edit', params: { slug: user.cvSlug } }
+    },
+
+    mustOwnResource: (to, user) => {
+        console.log('là ?');
+        console.log(to);
+        if (user.slug !== to.params.slug) {
+            return { name: 'cv.show', params: { slug: to.params.slug } }
+        }
+    },
+}
 
 const router = createRouter({
     history: createWebHistory(),
@@ -78,37 +63,31 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
     if (!to.meta.requireAuth) return
 
-    const token = localStorage.getItem('token')
-
-    if (!token) {
-        useLoginModal().open(to.fullPath)
-        return { name: 'cv.show', params: { slug: to.params.slug } }
-    }
-
     try {
         const response = await fetch("http://localhost:3000/api/auth/me", {
             method: 'GET',
-            headers: {
-                'Authorization': token
-            }
+            credentials: 'include'
         })
 
         if (!response.ok) {
-            localStorage.removeItem('token')
+            console.log(to.fullPath);
             useLoginModal().open(to.fullPath)
-            return { name: 'cv.show', params: { slug: to.params.slug } }
+            return { name: 'home' }
         }
 
         const user = await response.json()
 
-        if (user.slug !== to.params.slug) {
-            return { name: 'cv.show', params: { slug: to.params.slug } }
+        if (to.meta.authGuard) {
+            const guard = authGuards[to.meta.authGuard]
+            if (guard) {
+                const result = guard(to, user)
+                if (result) return result
+            }
         }
     } catch (error) {
         console.error('Auth error:', error)
-        localStorage.removeItem('token')
         useLoginModal().open(to.fullPath)
-        return { name: 'cv.show', params: { slug: to.params.slug } }
+        return { name: 'home' }
     }
 })
 

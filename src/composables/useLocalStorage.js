@@ -10,12 +10,12 @@ export function useLocalStorage(key, defaultValue) {
   const originalDefault = structuredClone(defaultValue)
   const data = ref(structuredClone(defaultValue))
 
-  // Charger depuis localStorage
   const load = () => {
     try {
       const item = localStorage.getItem(key)
       if (item) {
-        data.value = JSON.parse(item)
+        const parsed = JSON.parse(item)
+        data.value = parsed.data
         return true
       }
     } catch (e) {
@@ -24,30 +24,28 @@ export function useLocalStorage(key, defaultValue) {
     return false
   }
 
-  // Sauvegarder dans localStorage
   const save = () => {
     try {
-      localStorage.setItem(key, JSON.stringify(data.value))
+      localStorage.setItem(key, JSON.stringify({
+        data: data.value,
+        lastModifiedAt: Date.now()
+      }))
     } catch (e) {
       console.error('Erreur de sauvegarde localStorage:', e)
     }
   }
 
-  // Réinitialiser aux valeurs par défaut
   const clear = () => {
     data.value = structuredClone(originalDefault)
     localStorage.removeItem(key)
   }
 
-  // Charger les données au démarrage
   const hasLoadedData = load()
 
-  // Si aucune donnée n'existe, sauvegarder les valeurs par défaut
   if (!hasLoadedData) {
     save()
   }
 
-  // Sauvegarder automatiquement à chaque modification
   watch(data, save, { deep: true })
 
   return { data, save, clear }

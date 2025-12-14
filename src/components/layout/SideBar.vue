@@ -17,8 +17,6 @@ const props = defineProps({
 
 const $userData = computed(() => props.cvData);
 
-console.log($userData.value);
-
 const emit = defineEmits(["update:cvData", "toggleColorWheel"]);
 
 const handleSidebarResize = (event) => {
