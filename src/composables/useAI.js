@@ -1,6 +1,7 @@
-import { ref } from 'vue';
+import { ref } from 'vue'
+import { API_URL } from '@config/urls'
 
-//TODO : add bearer token
+
 export function useAI() {
     const isLoading = ref(false);
     const error = ref(null);
@@ -10,11 +11,12 @@ export function useAI() {
         error.value = null;
 
         try {
-            const response = await fetch('http://localhost:3000/api/enhance', {
+            const response = await fetch(`${API_URL}/api/enhance`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                credentials: 'include',
                 body: JSON.stringify({ text, context, targetRole, tone })
             });
 

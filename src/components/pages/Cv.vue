@@ -19,8 +19,6 @@ const { getUser } = useAuth()
 const cvState = useCvState()
 const isLoading = ref(true)
 
-const userCanEdit = computed(() => route.name === 'cv.edit')
-
 provide('cvData', cvState.cvData)
 provide('defaultCvData', cvState.defaultCvData)
 
@@ -45,6 +43,8 @@ const toggleColorWheel = () => {
     }
 }
 
+const isLayoutSelectorHovered = ref(false)
+
 useCssSync(cvState.cvData, [
     {
         path: 'configuration.sidebar.color',
@@ -67,10 +67,10 @@ initializeZoomWatcher(cvState.cvData)
 const cvSlug = route.params.slug
 
 useAutoSave(cvState, {
-    intervalMs: 30000,
+    intervalMs: 60000,
     saveOnUnload: true,
-    saveOnVisibilityChange: true,
-    saveOnBlur: true
+    saveOnVisibilityChange: false,
+    saveOnBlur: false
 })
 
 onMounted(async () => {
@@ -99,9 +99,6 @@ onMounted(async () => {
         console.log('✅ User authentifié, slug validé')
 
         cvState.loadModel(cvSlug, userData.cvData, userData.updatedAt)
-
-        console.log('✅ Auto-save activé')
-
     } catch (error) {
         console.error('❌ Erreur initialisation:', error)
         router.push({ name: 'error' })
@@ -113,7 +110,6 @@ onMounted(async () => {
 </script>
 
 <template>
-    <!-- Loader -->
     <div
         v-if="isLoading"
         class="loader-container"
@@ -124,37 +120,21 @@ onMounted(async () => {
         </div>
     </div>
 
-    <!-- Contenu principal -->
-    <div
-        v-else-if="cvState.cvData.value"
-        :class="{ 'read-only-mode': !userCanEdit }"
-    >
+    <div v-else-if="cvState.cvData.value">
         <RouterView />
 
-        <!-- Indicateur de sauvegarde discret -->
-        <transition name="fade">
+        <transition name="fade-delayed">
             <div
-                v-if="cvState.isSaving.value || cvState.isDirty.value"
+                v-if="cvState.isSaving.value"
                 class="autosave-indicator"
             >
-                <div
-                    v-if="cvState.isSaving.value"
-                    class="status saving"
-                >
+                <div class="status saving">
                     <div class="spinner-small"></div>
                     <span>Sauvegarde...</span>
-                </div>
-                <div
-                    v-else
-                    class="status unsaved"
-                >
-                    <span class="dot"></span>
-                    <span>Non sauvegardé</span>
                 </div>
             </div>
         </transition>
 
-        <!-- Toast d'erreur -->
         <transition name="fade">
             <div
                 v-if="cvState.error.value"
@@ -171,6 +151,8 @@ onMounted(async () => {
             @toggleColorWheel="toggleColorWheel"
             @changeColor="handleChangeColor"
             @update:collapsed="isPanelCollapsed = $event"
+            @layout-hover="isLayoutSelectorHovered = true"
+            @layout-leave="isLayoutSelectorHovered = false"
         />
 
         <div class="zoom-controls">
@@ -183,6 +165,7 @@ onMounted(async () => {
             ref="zoomable"
             v-zoom="{ initialZoom: zoom }"
             class="zoomable drag-area"
+            :class="{ 'layout-hover': isLayoutSelectorHovered }"
             @mousedown="handleMouseDown"
             @mousemove="handleMouseMove"
             @mouseup="handleMouseUp"
@@ -220,12 +203,6 @@ onMounted(async () => {
         >
             Ce que vous voyez ici est une démo fonctionnelle, gardez à l'esprit
             que certains dysfonctionnements peuvent survenir !
-            <span
-                v-if="!userCanEdit"
-                style="display: block; margin-top: 5px; font-weight: bold;"
-            >
-                👁️ Mode lecture seule
-            </span>
         </div>
     </div>
 </template>
@@ -239,6 +216,14 @@ onMounted(async () => {
     &:hover {
         cursor: move;
     }
+}
+
+.fade-delayed-leave-active {
+    transition: opacity 0.3s ease 1s;
+}
+
+.fade-delayed-leave-to {
+    opacity: 0;
 }
 
 .disclaimer {
@@ -298,31 +283,6 @@ onMounted(async () => {
 @page {
     size: A4 portrait;
     margin: 0;
-
-    @top-left {
-        content: none;
-    }
-
-    @top-center {
-        content: none;
-    }
-
-    @top-right {
-        content: none;
-    }
-
-    @bottom-left {
-        content: none;
-    }
-
-    @bottom-center {
-        content: none;
-    }
-
-    @bottom-right {
-        content: none;
-    }
-
 }
 
 @media print {
@@ -331,15 +291,31 @@ onMounted(async () => {
     body {
         margin: 0;
         padding: 0;
-        height: 100%;
+        width: 210mm;
+        height: 297mm;
+        background-color: #fff;
         overflow: hidden;
     }
 
-    body * {
-        visibility: hidden;
+    body>*:not(#a4-container) {
+        display: none !important;
     }
 
-    #a4-container,
+    #a4-container {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        margin: 0 !important;
+        transform: none !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+        page-break-after: avoid;
+        page-break-before: avoid;
+        page-break-inside: avoid;
+    }
+
     #a4-container * {
         visibility: visible;
     }
@@ -360,21 +336,10 @@ onMounted(async () => {
 
     .properties-panel,
     .disclaimer,
-    button {
-        display: none !important;
-    }
-
-    * {
-        page-break-inside: avoid;
-        page-break-after: avoid;
-    }
-
-    .zoom-controls {
-        display: none !important;
-    }
-
+    .zoom-controls,
     .autosave-indicator,
-    .error-toast {
+    .error-toast,
+    button {
         display: none !important;
     }
 }
@@ -415,43 +380,6 @@ onMounted(async () => {
     font-size: 14px;
 }
 
-.loader-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f5f5f5;
-}
-
-.loader {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-.loader-spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid #e0e0e0;
-    border-top-color: #62b1c9;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-.loader-text {
-    color: #666;
-    font-size: 16px;
-    font-weight: 500;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Indicateur de sauvegarde */
 .autosave-indicator {
     position: fixed;
     bottom: 24px;

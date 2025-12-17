@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const cvMaker = () => {
-    router.push('/cv')
+    router.push({ name: 'cv' })
 }
 const cvImport = () => {
     router.push('/cv')

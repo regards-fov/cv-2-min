@@ -2,7 +2,17 @@
     "cv": {
         "personal": [
             {
-                "key": "username",
+                "key": "firstName",
+                "value": "Clara",
+                "required": true
+            },
+            {
+                "key": "lastName",
+                "value": "Dupont",
+                "required": true
+            },
+            {
+                "key": "fullName",
                 "value": "Clara Dupont",
                 "required": true
             },
@@ -106,7 +116,7 @@
         ]
     },
     "configuration": {
-        "template": "template-air",
+        "template": "air",
         "sidebar": {
             "size": 240,
             "color": "#62b1c9"

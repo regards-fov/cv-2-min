@@ -1,13 +1,24 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import Cv from './components/pages/Cv.vue'
 import Home from './components/pages/Home.vue'
+import Pdf from './components/pages/Pdf.vue'
+import CvSetup from './components/pages/CvSetup.vue'
 import { useLoginModal } from '@composables/useLoginModal'
+import { API_URL } from '@config/urls'
 
 const routes = [
     {
         path: '/',
         name: 'home',
         component: Home
+    },
+    {
+        path: '/cv/setup',
+        name: 'cv.setup',
+        component: CvSetup,
+        meta: {
+            requireAuth: true
+        }
     },
     {
         path: '/cv',
@@ -21,10 +32,10 @@ const routes = [
     {
         path: '/cv/:slug',
         name: 'cv.show',
-        component: Cv
+        component: Pdf
     },
     {
-        path: '/cv/:slug/edit',
+        path: '/cv/edit/:slug',
         name: 'cv.edit',
         component: Cv,
         meta: {
@@ -41,18 +52,17 @@ const routes = [
 
 const authGuards = {
     redirectToUserCv: (to, user) => {
-        console.log(user);
-        console.log('ici');
+        if (!user.cvSlug) {
+            return { name: 'cv.setup' }
+        }
         return { name: 'cv.edit', params: { slug: user.cvSlug } }
     },
 
     mustOwnResource: (to, user) => {
-        console.log('là ?');
-        console.log(to);
-        if (user.slug !== to.params.slug) {
-            return { name: 'cv.show', params: { slug: to.params.slug } }
+        if (user.cvSlug !== to.params.slug) {
+            return { name: 'cv.edit', params: { slug: user.cvSlug } }
         }
-    },
+    }
 }
 
 const router = createRouter({
@@ -64,13 +74,13 @@ router.beforeEach(async (to, from) => {
     if (!to.meta.requireAuth) return
 
     try {
-        const response = await fetch("http://localhost:3000/api/auth/me", {
+        const response = await fetch(`${API_URL}/api/auth/me`, {
             method: 'GET',
             credentials: 'include'
         })
 
         if (!response.ok) {
-            console.log(to.fullPath);
+            console.log('intercept login modal')
             useLoginModal().open(to.fullPath)
             return { name: 'home' }
         }

@@ -1,96 +1,103 @@
 <script setup>
-import { ref, computed, watch, inject } from "vue";
-import PropertiesPanelButton from '../propertiesPanel/PropertiesPanelButton.vue';
-import PropertiesPanelActions from '../propertiesPanel/PropertiesPanelActions.vue';
-import PropertiesPanelDesign from '../propertiesPanel/PropertiesPanelDesign.vue';
-import PropertiesPanelLayout from '../propertiesPanel/PropertiesPanelLayout.vue';
-import PropertiesPanelTemplate from "../propertiesPanel/PropertiesPanelTemplate.vue";
-import iconCollapse from '@icons/collapse.svg';
+import { ref, computed, watch, inject } from "vue"
+import PropertiesPanelButton from '../propertiesPanel/PropertiesPanelButton.vue'
+import PropertiesPanelActions from '../propertiesPanel/PropertiesPanelActions.vue'
+import PropertiesPanelDesign from '../propertiesPanel/PropertiesPanelDesign.vue'
+import PropertiesPanelLayout from '../propertiesPanel/PropertiesPanelLayout.vue'
+import PropertiesPanelTemplate from "../propertiesPanel/PropertiesPanelTemplate.vue"
+import iconCollapse from '@icons/collapse.svg'
+import PropertiesPanelUserProfile from "./PropertiesPanelUserProfile.vue"
 
 const cvData = inject('cvData')
 
 const props = defineProps({
     isColorWheelOpen: { type: Boolean, required: true },
     currentColor: { type: String, required: true },
-    collapsed: { type: Boolean, required: true }
-});
+    collapsed: { type: Boolean, required: true },
+    isLayoutSelectorOpen: Boolean
 
-const emit = defineEmits(['toggleColorWheel', 'changeColor', 'update:collapsed']);
+})
 
-const showContent = ref(!props.collapsed);
-const isLayoutSelectorOpen = ref(false);
-const isTemplateSelectorOpen = ref(false);
+const emit = defineEmits(
+    [
+        'toggleColorWheel',
+        'changeColor',
+        'update:collapsed',
+        'layout-hover',
+        'layout-leave'
+    ]
+)
+
+const showContent = ref(!props.collapsed)
+const isLayoutSelectorOpen = ref(false)
+const isTemplateSelectorOpen = ref(false)
 
 const toggleCollapse = () => {
-    emit('update:collapsed', !props.collapsed);
-};
+    emit('update:collapsed', !props.collapsed)
+}
 
 const handleColorPickerClick = () => {
     if (props.collapsed) {
-        isLayoutSelectorOpen.value = false;
-        emit('update:collapsed', false);
+        isLayoutSelectorOpen.value = false
+        emit('update:collapsed', false)
         if (!props.isColorWheelOpen) {
-            emit('toggleColorWheel');
+            emit('toggleColorWheel')
         }
     } else {
-        emit('toggleColorWheel');
+        emit('toggleColorWheel')
     }
-};
+}
 
 const handleLayoutSelectorClick = () => {
     if (props.collapsed) {
-        emit('update:collapsed', false);
+        emit('update:collapsed', false)
         if (!isLayoutSelectorOpen.value) {
-            isLayoutSelectorOpen.value = true;
+            isLayoutSelectorOpen.value = true
         }
     } else {
-        isLayoutSelectorOpen.value = !isLayoutSelectorOpen.value;
+        isLayoutSelectorOpen.value = !isLayoutSelectorOpen.value
     }
-};
+}
 
 const handleTemplateSelectorClick = () => {
     if (props.collapsed) {
-        emit('update:collapsed', false);
+        emit('update:collapsed', false)
         if (!isTemplateSelectorOpen.value) {
-            isTemplateSelectorOpen.value = true;
+            isTemplateSelectorOpen.value = true
         }
     } else {
-        isTemplateSelectorOpen.value = !isTemplateSelectorOpen.value;
+        isTemplateSelectorOpen.value = !isTemplateSelectorOpen.value
     }
-};
+}
 
 const handleColorChange = (color) => {
-    emit('changeColor', color);
-};
+    emit('changeColor', color)
+}
 
 watch(() => props.collapsed, (isCollapsed) => {
     if (isCollapsed) {
-        showContent.value = false;
-        isLayoutSelectorOpen.value = false;
+        showContent.value = false
+        isLayoutSelectorOpen.value = false
+        isTemplateSelectorOpen.value = false
+        if (props.isColorWheelOpen) {
+            emit('toggleColorWheel')
+        }
     } else {
         setTimeout(() => {
-            showContent.value = true;
-        }, 250);
+            showContent.value = true
+        }, 250)
     }
-});
+})
 
 const containerClass = computed(() => ({
     'properties-panel': true,
     'collapsed': props.collapsed
-}));
+}))
 </script>
 
 <template>
 
     <div :class="containerClass">
-        <button onclick="localStorage.clear()">X LS</button>
-
-        <img
-            :src="cvData.cv.picture.path"
-            class="picture_thumbnail"
-            alt="user_picture"
-        />
-
         <PropertiesPanelButton
             variant="collapse"
             :icon="iconCollapse"
@@ -99,6 +106,11 @@ const containerClass = computed(() => ({
             :collapsed="collapsed"
             :show-content="showContent"
             @click="toggleCollapse"
+        />
+
+        <PropertiesPanelUserProfile
+            :collapsed="collapsed"
+            :show-content="showContent"
         />
 
         <PropertiesPanelActions
@@ -120,6 +132,8 @@ const containerClass = computed(() => ({
             :collapsed="collapsed"
             :show-content="showContent"
             @click:layout-selector="handleLayoutSelectorClick"
+            @layout-hover="$emit('layout-hover')"
+            @layout-leave="$emit('layout-leave')"
         />
 
         <PropertiesPanelTemplate
@@ -144,22 +158,14 @@ const containerClass = computed(() => ({
     gap: 9px;
     padding: 16px 16px;
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    // height: 100%;
     box-shadow: 0 2px 4px rgba(96, 135, 208, 0.3);
     transition: width 0.25s ease;
     overflow: hidden;
 }
 
 .properties-panel.collapsed {
-    width: 64px;
+    width: 60px;
     padding-left: 8px;
     padding-right: 8px;
-}
-
-.picture_thumbnail {
-    width: 44px;
-    height: 44px;
-    border: 2px solid rgb(255, 255, 255);
-    border-radius: 50%;
 }
 </style>

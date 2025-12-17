@@ -11,17 +11,17 @@ const cvData = defineModel({ type: Object, required: true })
         class="personal"
     >
         <TextareaSection
-            v-font-size-editor="{ cvData, name: 'username', maxSize: 24 }"
-            v-model="cvData.cv.personal[0].value"
+            v-font-size-editor="{ cvData, name: 'fullname', maxSize: 24 }"
+            v-model="cvData.cv.personal[2].value"
             name="username"
-            placeholder="Nom Prénom"
+            placeholder="Nom et prénom"
         />
 
         <TextareaSection
             v-font-size-editor="{ cvData, name: 'lookupJob', maxSize: 18 }"
-            v-model="cvData.cv.personal[1].value"
+            v-model="cvData.cv.personal[3].value"
             name="lookupJob"
-            placeholder="Poste"
+            placeholder="Poste occupé ou recherché"
         />
     </div>
 </template>

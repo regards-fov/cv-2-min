@@ -1,4 +1,5 @@
 import iconExport from '@icons/export.svg';
+import iconShare from '@icons/share.svg';
 import iconReset from '@icons/reset.svg';
 import iconDownload from '@icons/download.svg';
 import iconColor from '@icons/color.svg';
@@ -18,6 +19,13 @@ export const propertiesPanelSections = [
                 label: 'Exporter en PDF',
                 tooltip: 'Exporter en PDF',
                 action: 'exportToPDF'
+            },
+            {
+                id: 'share',
+                icon: iconShare,
+                label: 'Partager votre CV',
+                tooltip: 'Partagez votre CV',
+                action: 'shareSecretLink'
             },
             {
                 id: 'reset',

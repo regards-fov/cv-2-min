@@ -1,36 +1,39 @@
 <script setup>
-import { computed } from 'vue';
-import { exportToPDF } from '@utils/toPDF';
-import { dataToJson } from '@utils/dataToJson';
-import { useCvState } from '@composables/useCvState';
-import PropertiesPanelButton from './PropertiesPanelButton.vue';
-import { propertiesPanelSections } from '@/config/propertiesPanelConfig';
+import { computed } from 'vue'
+import { exportToPDF } from '@utils/toPDF'
+import { dataToJson } from '@utils/dataToJson'
+import { useCvState } from '@composables/useCvState'
+import PropertiesPanelButton from './PropertiesPanelButton.vue'
+import { propertiesPanelSections } from '@/config/propertiesPanelConfig'
+import { useRoute } from 'vue-router'
 
-const { initCV, currentModel } = useCvState();
+const route = useRoute().fullPath
+
+const { initCV, currentModel } = useCvState()
 
 const props = defineProps({
     collapsed: { type: Boolean, required: true },
     showContent: { type: Boolean, required: true }
-});
+})
 
-const isLocalhost = window.location.hostname === 'localhost';
+const isLocalhost = window.location.hostname === 'localhost'
 
 const actionsSection = computed(() =>
     propertiesPanelSections.find(section => section.id === 'actions')
-);
+)
 
 const actionHandlers = {
-    exportToPDF: exportToPDF,
+    exportToPDF: () => exportToPDF(route),
     initCV: initCV,
     downloadJson: () => dataToJson(currentModel.value)
-};
+}
 
 const shouldShowButton = (button) => {
     if (button.condition === 'isLocalhost') {
-        return isLocalhost;
+        return isLocalhost
     }
-    return true;
-};
+    return true
+}
 </script>
 
 <template>

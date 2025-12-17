@@ -12,15 +12,21 @@ const props = defineProps({
     showContent: { type: Boolean, required: true }
 });
 
-const emit = defineEmits(['click:layoutSelector']);
+const emit = defineEmits(
+    [
+        'click:layoutSelector',
+        'layout-hover',
+        'layout-leave'
+    ]
+)
 
 const layoutSection = computed(() =>
     propertiesPanelSections.find(section => section.id === 'layout')
-);
+)
 
 const handleLayoutSelectorClick = () => {
     emit('click:layoutSelector');
-};
+}
 </script>
 
 <template>
@@ -38,7 +44,11 @@ const handleLayoutSelectorClick = () => {
             :class="layoutSection.separatorClass"
         ></div>
 
-        <div class="expandable-wrapper">
+        <div
+            class="expandable-wrapper"
+            @mouseenter="$emit('layout-hover')"
+            @mouseleave="$emit('layout-leave')"
+        >
             <PropertiesPanelButton
                 :icon="layoutSection.expandable.icon"
                 :label="layoutSection.expandable.label"

@@ -15,10 +15,6 @@ const props = defineProps({
 
 const emit = defineEmits(['click:templateSelector']);
 
-const setLayout = (layoutConf) => {
-    cvData.value.configuration.mainSection.layout = layoutConf
-}
-
 const templateSection = computed(() =>
     propertiesPanelSections.find(section => section.id === 'template')
 );

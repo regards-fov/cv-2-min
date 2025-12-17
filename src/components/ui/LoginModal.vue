@@ -23,7 +23,6 @@ const handleGoogleLogin = async () => {
 }
 
 const handleSubmit = async () => {
-
     error.value = ''
 
     const endpoint = isLogin.value
@@ -52,19 +51,27 @@ const handleSubmit = async () => {
         }
 
         const data = await response.json()
-
-        if (redirectTo.value) {
-            console.log("redirectTo" + redirectTo.value);
-            router.push(redirectTo.value)
-        } else if (data.slug) {
-            console.log("redirect to data slug");
-            router.push(`/cv/${data.slug}`)
-        } else {
-            console.log("else redirect to /cv");
-            router.push('/cv')
-        }
+        const targetRedirect = redirectTo.value
 
         close()
+
+        if (!isLogin.value) {
+            await router.push(
+                {
+                    name: 'cv.setup',
+                    state: { email: email.value }
+                })
+            return
+        }
+
+        if (redirectTo.value) {
+            await router.push(targetRedirect)
+        } else if (data.slug) {
+            await router.push(`/cv/edit/${data.slug}`)
+        } else {
+            await router.push('/cv')
+        }
+
     } catch (err) {
         error.value = err.message
     }

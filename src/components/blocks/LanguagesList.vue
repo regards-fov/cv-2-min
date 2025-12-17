@@ -2,7 +2,7 @@
 import { ref, inject } from 'vue'
 import RemoveItemButton from "../ui/RemoveItemButton.vue";
 import AddItemButton from "../ui/AddItemButton.vue";
-import languages from "../../resources/languages.json";
+import languages from "@utils/languages.json";
 
 const cvData = inject('cvData')
 

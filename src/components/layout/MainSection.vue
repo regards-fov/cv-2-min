@@ -1,6 +1,6 @@
 <script setup>
 
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import RemoveItemButton from "../ui/RemoveItemButton.vue";
 import Resume from "../blocks/Resume.vue";
 import ExperienceLayout from "../blocks/ExperienceLayout.vue"
@@ -10,7 +10,9 @@ import { useDraggable } from '@composables/useDraggable'
 const cvData = defineModel('cvData', {
     type: Object,
     required: true
-});
+})
+
+const isLayoutSelectorHovered = ref(false)
 
 const {
     isDragging,
@@ -61,86 +63,91 @@ const removeItem = (category, index) => {
         id="main-section"
     >
         <Resume />
-        <section
-            id="professional-xp"
-            :class="{ 'is-dragging': isDragging, 'hover-disabled': hoverDisabled }"
-            @mousemove="handleMouseMove"
+        <div
+            id="experiences"
+            :class="{ 'layout-hover': isLayoutSelectorHovered }"
         >
 
-            <div class="main-label">Expériences professionelles</div>
-
-            <draggable
-                v-model="$cv.jobs"
-                item-key="id"
-                :disabled="isEditing"
-                animation="150"
-                easing="cubic-bezier(0.33, 1, 0.58, 1)"
-                tag="ul"
-                class="list"
-                ghost-class="ghost"
-                dragClass="sortable-drag"
-                @start="handleDragStart"
-                @end="handleDragEnd"
+            <section
+                id="professional-xp"
+                :class="{ 'is-dragging': isDragging, 'hover-disabled': hoverDisabled }"
+                @mousemove="handleMouseMove"
             >
-                <template #item="{ index }">
-                    <li class="experience-item draggable">
-                        <div :class="['item', { 'hoverable': !isDragging && !hoverDisabled }]">
-                            <ExperienceLayout
-                                :index="index"
-                                type="jobs"
-                                v-model="$cv.jobs[index]"
-                            />
-                            <div class="user-actions">
-                                <RemoveItemButton @click="removeItem('jobs', index)" />
-                            </div>
-                        </div>
-                    </li>
-                </template>
-                <template #footer>
-                    <button
-                        class="addItemButton"
-                        @click="addItem('jobs')"
-                    >
-                    </button>
-                </template>
-            </draggable>
 
-        </section>
+                <div class="main-label">Expériences professionelles</div>
 
-        <section id="education">
-            <div class="main-label">Formation</div>
-            <ul class="list">
                 <draggable
-                    v-model="$cv.education"
+                    v-model="$cv.jobs"
                     item-key="id"
-                    handle=".draggable"
-                    animation=150
-                    easing="cubic-bezier(0.33, 1, 0.68, 1)"
+                    :disabled="isEditing"
+                    animation="150"
+                    easing="cubic-bezier(0.33, 1, 0.58, 1)"
+                    tag="ul"
+                    class="list"
+                    ghost-class="ghost"
+                    dragClass="sortable-drag"
+                    @start="handleDragStart"
+                    @end="handleDragEnd"
                 >
                     <template #item="{ index }">
-                        <li class="experience-item">
-                            <div class="item">
+                        <li class="experience-item draggable">
+                            <div :class="['item', { 'hoverable': !isDragging && !hoverDisabled }]">
                                 <ExperienceLayout
                                     :index="index"
-                                    type="education"
-                                    v-model="$cv.education[index]"
+                                    type="jobs"
+                                    v-model="$cv.jobs[index]"
                                 />
-                                <RemoveItemButton @click="removeItem('education', index)" />
+                                <div class="user-actions">
+                                    <RemoveItemButton @click="removeItem('jobs', index)" />
+                                </div>
                             </div>
                         </li>
                     </template>
                     <template #footer>
                         <button
                             class="addItemButton"
-                            @click="addItem('education')"
+                            @click="addItem('jobs')"
                         >
                         </button>
                     </template>
                 </draggable>
-            </ul>
-        </section>
-    </div>
 
+            </section>
+
+            <section id="education">
+                <div class="main-label">Formation</div>
+                <ul class="list">
+                    <draggable
+                        v-model="$cv.education"
+                        item-key="id"
+                        handle=".draggable"
+                        animation=150
+                        easing="cubic-bezier(0.33, 1, 0.68, 1)"
+                    >
+                        <template #item="{ index }">
+                            <li class="experience-item">
+                                <div class="item">
+                                    <ExperienceLayout
+                                        :index="index"
+                                        type="education"
+                                        v-model="$cv.education[index]"
+                                    />
+                                    <RemoveItemButton @click="removeItem('education', index)" />
+                                </div>
+                            </li>
+                        </template>
+                        <template #footer>
+                            <button
+                                class="addItemButton"
+                                @click="addItem('education')"
+                            >
+                            </button>
+                        </template>
+                    </draggable>
+                </ul>
+            </section>
+        </div>
+    </div>
 </template>
 
 <style scoped lang="scss">
@@ -158,6 +165,7 @@ const removeItem = (category, index) => {
 .main {
     display: flex;
     flex-direction: column;
+    align-self: flex-start;
     flex-wrap: nowrap;
     padding: 0 12px;
     padding-right: 14px;

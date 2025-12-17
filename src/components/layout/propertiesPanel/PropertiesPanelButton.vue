@@ -23,12 +23,14 @@ const handleClick = (event) => {
         @click="handleClick"
         v-tooltip:right="{ text: tooltip, show: collapsed && tooltip }"
     >
-        <img
-            :src="icon"
-            class="icon"
-            :class="{ rotated: variant === 'collapse' && collapsed }"
-            alt=""
-        />
+        <div class="img-container">
+            <img
+                :src="icon"
+                class="icon"
+                :class="{ rotated: variant === 'collapse' && collapsed }"
+                alt=""
+            />
+        </div>
         <span
             class="label"
             v-show="showContent"
@@ -42,19 +44,17 @@ const handleClick = (event) => {
     display: flex;
     position: relative;
     width: 100%;
-    font-family: Inter, Roboto, -apple-system, "San Francisco", "Segoe UI", "Helvetica Neue", sans-serif;
-    justify-content: flex-start;
+    justify-content: space-evenly;
     align-items: center;
+    font-family: Inter, Roboto, -apple-system, "San Francisco", "Segoe UI", "Helvetica Neue", sans-serif;
     gap: 12px;
-    padding: 8px 10px;
+    padding: 8px 8px;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     background: #ffffff;
     color: #1e293b;
     font-size: 14px;
     font-weight: 600;
-    text-align: left;
-    letter-spacing: 0.4px;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -91,9 +91,17 @@ const handleClick = (event) => {
     border-bottom-left-radius: 0px;
 }
 
+.img-container {
+    flex-shrink: 0;
+    width: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .icon {
-    width: 28px;
-    height: 28px;
+    width: 100%;
+    margin: 0 auto;
     position: relative;
     z-index: 1;
     transition: transform 0.3s ease;
@@ -103,20 +111,29 @@ const handleClick = (event) => {
     transform: rotate(180deg);
 }
 
+.variant-collapse {
+    background-color: #f8fafc;
+    padding: 8px 11px;
+}
+
 .variant-collapse:hover {
     background: #f8fafc;
 }
 
 .variant-collapse .icon {
-    width: 25px;
+    width: 100%;
     height: 25px;
+}
+
+
+.variant-profil-thumbnail img {
+    border-radius: 50%;
 }
 
 .label {
     white-space: normal;
-    line-height: 14px;
-    position: relative;
-    z-index: 1;
+    flex: 1;
+    text-align: left;
 }
 
 .fade-in {

@@ -1,4 +1,6 @@
 import { ref, computed } from 'vue'
+import { API_URL } from '@config/urls'
+
 
 const user = ref(null)
 const isAuthenticated = computed(() => user.value !== null)
@@ -6,7 +8,7 @@ const isAuthenticated = computed(() => user.value !== null)
 export function useAuth() {
     const getUser = async () => {
         try {
-            const response = await fetch("http://localhost:3000/api/auth/me", {
+            const response = await fetch(`${API_URL}/api/auth/me`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -33,7 +35,7 @@ export function useAuth() {
 
     const login = async (email, password) => {
         try {
-            const response = await fetch("http://localhost:3000/api/auth/login", {
+            const response = await fetch(`${API_URL}/api/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

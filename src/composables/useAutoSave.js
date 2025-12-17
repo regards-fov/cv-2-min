@@ -15,9 +15,9 @@ export function useAutoSave(cvState, options = {}) {
             clearInterval(saveInterval)
         }
 
+        //Auto-save périodique
         saveInterval = setInterval(() => {
             if (cvState.isDirty.value) {
-                console.log('Auto-save périodique')
                 cvState.saveToServer()
             }
         }, intervalMs)
@@ -42,14 +42,13 @@ export function useAutoSave(cvState, options = {}) {
 
     const handleVisibilityChange = () => {
         if (document.hidden && cvState.isDirty.value) {
-            console.log('Page cachée, sauvegarde')
             cvState.saveToServer()
         }
     }
 
+    //Save on input blur
     const handleBlur = () => {
         if (cvState.isDirty.value) {
-            console.log('Perte de focus, sauvegarde')
             cvState.saveToServer()
         }
     }
