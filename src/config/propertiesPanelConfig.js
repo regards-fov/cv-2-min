@@ -73,7 +73,7 @@ export const propertiesPanelSections = [
     {
         id: 'template',
         title: 'TEMPLATE',
-        color: '#059669',
+        color: 'rgb(44 125 183)',
         separatorClass: 'template-separator',
         expandable: {
             id: 'templateSelector',
