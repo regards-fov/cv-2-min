@@ -10,7 +10,6 @@ const shareUrl = ref(null)
 const isGenerating = ref(false)
 const copied = ref(false)
 
-// Réinitialiser quand la modale se ferme
 watch(isOpen, (newValue) => {
     if (!newValue) {
         shareUrl.value = null

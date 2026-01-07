@@ -16,7 +16,7 @@ export async function generatePDF(action = 'download') {
         const fullNameItem = json.data.cv.personal?.find(item => item.key === 'fullName')
         const fullName = fullNameItem?.value?.replace(/\s+/g, '-') || 'CV'
 
-        const response = await fetch(`${API_URL}/api/cv/generate`, {
+        const response = await fetch(`${API_URL}/api/pdf/generate`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -33,7 +33,6 @@ export async function generatePDF(action = 'download') {
 
         if (action === 'store') {
             const data = await response.json()
-            console.log(data.url)
             return data.url
         }
 

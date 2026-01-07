@@ -82,6 +82,9 @@ export const propertiesPanelSections = [
             tooltip: 'Choix du template',
             component: 'TemplateSelector',
         },
-        templates: ['classic', 'air'],
+        templates: [
+            { id: 'classic', label: 'Classique' },
+            { id: 'air', label: 'Moderne' }
+        ],
     }
 ];

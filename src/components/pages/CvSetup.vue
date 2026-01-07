@@ -51,7 +51,7 @@ const handleSubmit = async () => {
 
 <template>
     <div class="setup-container">
-        <h1>Configurez votre CV</h1>
+        <h1>Avant de démarrer</h1>
 
         <form @submit.prevent="handleSubmit">
             <div class="form-group">

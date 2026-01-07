@@ -2,13 +2,18 @@
     "cv": {
         "personal": [
             {
-                "key": "username",
-                "value": "Julien Mauroy",
+                "key": "firstName",
+                "value": "Julien",
                 "required": true
             },
             {
-                "key": "job",
-                "value": "Développeur Web",
+                "key": "lastName",
+                "value": "Mauroy",
+                "required": true
+            },
+            {
+                "key": "fullName",
+                "value": "Julien Mauroy",
                 "required": true
             },
             {
@@ -153,7 +158,7 @@
             "textAlign": "justify"
         },
         "fontSize": {
-            "username": "21",
+            "fullName": "21",
             "lookupJob": "16",
             "resume": "11"
         }

@@ -31,7 +31,6 @@ const exportPdf = async () => {
         await generatePDF('download')
     } catch (err) {
         console.error('Erreur export PDF:', err)
-        // Optionnel : afficher un toast d'erreur
     }
 }
 

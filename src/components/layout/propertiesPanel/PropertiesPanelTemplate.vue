@@ -77,10 +77,10 @@ const selectTemplate = (template) => {
                         <button
                             v-for="template in templateSection.templates"
                             :key="template"
-                            :class="['template-btn', { active: cvData.configuration.template === template }]"
-                            @click="selectTemplate(template)"
+                            :class="['template-btn', { active: cvData.configuration.template === template.id }]"
+                            @click="selectTemplate(template.id)"
                         >
-                            {{ template }}
+                            {{ template.label }}
                         </button>
                     </div>
 

@@ -91,6 +91,24 @@ body *:focus:not(²ton) {
     body {
         background-color: #fff;
     }
+
+    .properties-panel,
+    .disclaimer,
+    .zoom-controls,
+    .autosave-indicator,
+    .error-toast,
+    .loader-container,
+    .loader-overlay,
+    .removeItem,
+    .upload-overlay,
+    .radiusAdjuster,
+    .ai-button,
+    .custom-tooltip,
+    .color-wheel-cursor,
+    button {
+        display: none !important;
+        visibility: hidden !important;
+    }
 }
 
 #a4-container {

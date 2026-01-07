@@ -5,10 +5,10 @@ import '@styles/variables.css'
 import '@styles/template-air.scss'
 import colorWheel from './directives/colorWheel'
 import sidebarResizer from './directives/sidebarResizer'
-import fontSizeEditor from './directives/fontSizeEditor';
+import fontSizeEditor from './directives/fontSizeEditor'
 import wcagAdapter from './directives/wcagAdapter'
 import { croppable } from './directives/croppable'
-import { createGtag } from "vue-gtag";
+import { createGtag } from "vue-gtag"
 
 const app = createApp(App)
 

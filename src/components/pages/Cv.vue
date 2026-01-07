@@ -355,8 +355,15 @@ onMounted(async () => {
     .error-toast,
     .loader-container,
     .loader-overlay,
+    .removeItem,
+    .upload-overlay,
+    .radiusAdjuster,
+    .ai-button,
+    .custom-tooltip,
+    .color-wheel-cursor,
     button {
         display: none !important;
+        visibility: hidden !important;
     }
 }
 

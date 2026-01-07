@@ -3,7 +3,7 @@
         "personal": [
             {
                 "key": "firstName",
-                "value": "Clara",
+                "value": "Léo",
                 "required": true
             },
             {
@@ -13,17 +13,17 @@
             },
             {
                 "key": "fullName",
-                "value": "Clara Dupont",
+                "value": "Léo Dupont",
                 "required": true
             },
             {
                 "key": "job",
-                "value": "Chargée de marketing digital",
+                "value": "Chargé de marketing digital",
                 "required": true
             },
             {
                 "key": "age",
-                "value": 27,
+                "value": 30,
                 "required": false
             }
         ],
@@ -34,17 +34,17 @@
         "contact": [
             {
                 "key": "email",
-                "value": "clara.dupont@gmail.com",
+                "value": "leo.dupont@gmail.com",
                 "required": true
             },
             {
                 "key": "address",
-                "value": "12 Rue des Lilas, 75011 Paris",
+                "value": "19 Rue des Lilas, 13260 Cassis",
                 "required": true
             },
             {
                 "key": "phoneNumber",
-                "value": "06 23 45 67 89",
+                "value": "06 07 08 09 10",
                 "required": true
             }
         ],
@@ -73,19 +73,19 @@
         "resume": "Passionnée de communication numérique, j'aide les marques à accroître leur visibilité grâce à des stratégies data-driven et créatives.",
         "jobs": [
             {
-                "job": "Chargée de marketing digital",
+                "job": "Chargé de marketing digital",
                 "period": "2023-2025",
                 "extraInfo": "Agence WebPulse",
                 "description": "Pilotage de campagnes publicitaires multicanales, analyse de données et optimisation SEO/SEA."
             },
             {
-                "job": "Assistante communication",
+                "job": "Assistant communication",
                 "period": "2022-2023",
                 "extraInfo": "",
                 "description": "Création de contenus, gestion des réseaux sociaux, reporting et suivi des performances."
             },
             {
-                "job": "Chargée de communication digitale",
+                "job": "Chargé de communication digitale",
                 "period": "2021-2022",
                 "extraInfo": "Agence NovaCom",
                 "description": "Production de contenus web, optimisation SEO, gestion de newsletters et suivi des indicateurs de performance."

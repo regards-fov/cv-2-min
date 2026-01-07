@@ -90,6 +90,7 @@ const handleSubmit = async () => {
             <button
                 class="google-btn"
                 @click="handleGoogleLogin"
+                disabled
             >
                 <svg
                     width="18"
@@ -231,6 +232,13 @@ h1 {
     font-weight: 500;
     margin-bottom: 20px;
     transition: background-color 0.2s;
+}
+
+.google-btn:disabled {
+    background-color: light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3));
+    color: light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3));
+    border-color: light-dark(rgba(118, 118, 118, 0.3), rgba(195, 195, 195, 0.3));
+    cursor: not-allowed;
 }
 
 .google-btn:hover {
