@@ -215,7 +215,7 @@ onMounted(async () => {
             class="disclaimer"
             v-show="!isLocalhost"
         >
-            Ce que vous voyez ici est une démo fonctionnelle, gardez à l'esprit
+            Ce que vous voyez ici est une démo, gardez à l'esprit
             que certains dysfonctionnements peuvent survenir !
         </div>
     </div>

@@ -26,6 +26,7 @@ onMounted(() => {
 			<div class="loader">
 				<div class="loader-spinner"></div>
 				<p class="loader-text">Chargement de l'app...</p>
+				<p>Cela peut prendre jusqu'à une minute</p>
 			</div>
 		</div>
 		<div v-else>
