@@ -22,7 +22,7 @@ const routes = [
         name: 'cv.setup',
         component: CvSetup,
         meta: {
-            requireAuth: true
+            requireAuth: false
         }
     },
     {
@@ -30,7 +30,7 @@ const routes = [
         name: 'cv',
         component: { template: '<div></div>' },
         meta: {
-            requireAuth: true,
+            requireAuth: false,
             authGuard: 'redirectToUserCv'
         }
     },
@@ -44,7 +44,7 @@ const routes = [
         name: 'cv.edit',
         component: Cv,
         meta: {
-            requireAuth: true,
+            requireAuth: false,
             authGuard: 'mustOwnResource'
         }
     },
