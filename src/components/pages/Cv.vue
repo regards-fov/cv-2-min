@@ -241,7 +241,7 @@ onMounted(async () => {
 }
 
 .disclaimer {
-    background-color: rgb(153, 42, 110);
+    background-color: #6eafe7;
     color: #f5f5f5;
     font-weight: 600;
     position: fixed;

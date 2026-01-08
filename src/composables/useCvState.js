@@ -1,6 +1,8 @@
 import { ref, computed, watch, nextTick } from "vue"
 import { useLocalStorage } from "./useLocalStorage"
 import cvType from "../resources/cvType.json"
+import { API_URL } from '@config/urls'
+
 
 const currentModel = ref(null)
 const cvData = ref(null)
@@ -87,7 +89,7 @@ export function useCvState() {
         error.value = null
 
         try {
-            const response = await fetch('http://localhost:3000/api/cv/save', {
+            const response = await fetch(`${API_URL}/api/cv/save`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

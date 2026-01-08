@@ -26,7 +26,7 @@ export function useAutoSave(cvState, options = {}) {
 
     const handleBeforeUnload = () => {
         if (cvState.hasPendingSync.value && cvState.cvData.value) {
-            fetch('http://localhost:3000/api/cv/save', {
+            fetch(`${API_URL}/api/cv/save`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
