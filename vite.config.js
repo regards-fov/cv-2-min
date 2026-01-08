@@ -2,7 +2,6 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import vueDevTools from 'vite-plugin-vue-devtools'
 import path from 'path'
 import fs from 'fs'
 
@@ -10,23 +9,32 @@ export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
-    // vueDevTools(),
     {
-      name: 'serve-static-pages',
+      name: 'serve-routes',
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
-          const staticRoutes = {
-            '/': '/index.html'
-          }
+          const url = req.url.split('?')[0]
 
-          if (staticRoutes[req.url]) {
-            const filePath = path.join(__dirname, 'public', staticRoutes[req.url])
+          // Route racine
+          if (url === '/') {
+            const filePath = path.join(__dirname, 'public', 'index.html')
             if (fs.existsSync(filePath)) {
               res.setHeader('Content-Type', 'text/html')
               res.end(fs.readFileSync(filePath))
               return
             }
           }
+
+          // Routes /cv et /app → app/index.html (sans extension de fichier)
+          if ((url.startsWith('/cv') || url.startsWith('/app')) && !path.extname(url)) {
+            const filePath = path.join(__dirname, 'app', 'index.html')
+            if (fs.existsSync(filePath)) {
+              res.setHeader('Content-Type', 'text/html')
+              res.end(fs.readFileSync(filePath))
+              return
+            }
+          }
+
           next()
         })
       }

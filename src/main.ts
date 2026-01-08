@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import router from './router.js'
 import App from './App.vue'
+import '../app/index.scss'
+
 import '@styles/variables.css'
 import '@styles/template-air.scss'
 import colorWheel from './directives/colorWheel'
