@@ -22,7 +22,7 @@ const routes = [
         name: 'cv.setup',
         component: CvSetup,
         meta: {
-            requireAuth: false
+            requireAuth: true
         }
     },
     {
@@ -30,7 +30,7 @@ const routes = [
         name: 'cv',
         component: { template: '<div></div>' },
         meta: {
-            requireAuth: false,
+            requireAuth: true,
             authGuard: 'redirectToUserCv'
         }
     },
@@ -44,7 +44,7 @@ const routes = [
         name: 'cv.edit',
         component: Cv,
         meta: {
-            requireAuth: false,
+            requireAuth: true,
             authGuard: 'mustOwnResource'
         }
     },
@@ -84,6 +84,7 @@ router.beforeEach(async (to, from) => {
     }
 
     try {
+        console.log('try router vuejs');
         const response = await fetch(`${API_URL}/api/auth/me`, {
             method: 'GET',
             credentials: 'include'
