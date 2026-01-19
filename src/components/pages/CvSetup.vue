@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { API_URL } from '@config/urls'
 
 const router = useRouter()
 
@@ -20,7 +21,7 @@ const handleSubmit = async () => {
     isLoading.value = true
 
     try {
-        const response = await fetch('http://localhost:3000/api/cv/create', {
+        const response = await fetch(`${API_URL}/api/cv/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -84,7 +84,6 @@ router.beforeEach(async (to, from) => {
     }
 
     try {
-        console.log('try router vuejs');
         const response = await fetch(`${API_URL}/api/auth/me`, {
             method: 'GET',
             credentials: 'include'
