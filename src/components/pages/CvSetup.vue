@@ -14,6 +14,8 @@ const isLoading = ref(false)
 
 onMounted(() => {
     email.value = history.state.email || ''
+    console.log(history);
+    console.log(email.value);
 })
 
 const handleSubmit = async () => {

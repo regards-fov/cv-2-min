@@ -44,15 +44,16 @@ const handleSubmit = async () => {
             })
         })
 
+        const data = await response.json()
+
         if (!response.ok) {
-            throw new Error(
+            error.value =
                 isLogin.value
                     ? 'Identifiants incorrects'
-                    : 'Erreur lors de la création du compte'
-            )
+                    : data.error
+            return
         }
 
-        const data = await response.json()
         const targetRedirect = redirectTo.value
 
         close()
