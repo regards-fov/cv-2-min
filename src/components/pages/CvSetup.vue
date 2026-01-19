@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { API_URL } from '@config/urls'
 
+
 const router = useRouter()
 
 const firstName = ref('')
@@ -13,9 +14,7 @@ const error = ref('')
 const isLoading = ref(false)
 
 onMounted(() => {
-    email.value = history.state.email || ''
-    console.log(history);
-    console.log(email.value);
+    email.value = history.state.email || 'votre@email.com'
 })
 
 const handleSubmit = async () => {
